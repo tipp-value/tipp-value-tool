@@ -14,7 +14,10 @@
   <meta property="og:title" content="WM 2026 Wettquoten Vergleich – Value Bets finden" />
   <meta property="og:description" content="Vergleiche live Wettquoten aller großen Buchmacher. Finde Value Bets für die WM 2026 und sichere dir bis zu 100€ Neukundenbonus." />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="theme-color" content="#0f0f13" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet" />
   <!-- Structured Data für Google -->
   <script type="application/ld+json">
   {
@@ -37,84 +40,134 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0f0f13;
-      --surface: #1a1a22;
-      --surface2: #22222e;
-      --accent: #7c6af7;
-      --accent2: #f76ac8;
-      --green: #4ade80;
-      --red: #f87171;
-      --text: #e8e8f0;
-      --muted: #8888aa;
-      --border: rgba(255,255,255,.07);
-      --radius: 16px;
+      --bg: #080c14;
+      --surface: #0e1420;
+      --surface2: #141d2e;
+      --surface3: #1a2438;
+      --accent: #00c853;
+      --accent-dark: #009c3f;
+      --gold: #f5a623;
+      --green: #00c853;
+      --red: #ff4444;
+      --text: #e8eef8;
+      --muted: #7a8aaa;
+      --border: rgba(255,255,255,.06);
+      --border2: rgba(255,255,255,.1);
+      --radius: 8px;
+      --radius-lg: 12px;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
       min-height: 100vh;
+      font-size: 15px;
     }
 
     header {
       background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 1.1rem 2rem;
+      border-bottom: 2px solid var(--accent);
+      padding: 0 2rem;
       display: flex;
       align-items: center;
-      gap: .9rem;
+      gap: 1rem;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
+      height: 56px;
     }
 
-    header .logo { font-size: 1.4rem; }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      text-decoration: none;
+    }
+
+    .header-logo-icon {
+      background: var(--accent);
+      color: #000;
+      font-weight: 900;
+      font-size: .75rem;
+      padding: .2rem .5rem;
+      border-radius: 4px;
+      letter-spacing: .05em;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
 
     header h1 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #fff 30%, var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.01em;
+      font-family: 'Barlow Condensed', sans-serif;
     }
 
-    header .subtitle {
+    .header-live {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .68rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: .1em;
+      text-transform: uppercase;
       margin-left: auto;
-      font-size: .75rem;
-      color: var(--muted);
-      letter-spacing: .08em;
+    }
+
+    .header-live-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(.8); }
+    }
+
+    .header-18 {
+      background: var(--red);
+      color: #fff;
+      font-size: .6rem;
+      font-weight: 800;
+      padding: .15rem .4rem;
+      border-radius: 3px;
+      margin-left: .75rem;
     }
 
     .container {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem 4rem;
+      padding: 2rem 1.25rem 4rem;
     }
 
     .section-label {
-      font-size: .68rem;
+      font-size: .62rem;
       font-weight: 700;
-      letter-spacing: .16em;
+      letter-spacing: .18em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: .6rem;
+      margin-bottom: .5rem;
     }
 
     .card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     .card-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       margin-bottom: 1.25rem;
+      color: #fff;
     }
 
     /* ── API Bar ─────────────────────────────────────────────── */
@@ -194,21 +247,22 @@
     .sport-select:focus { border-color: var(--accent); }
 
     .btn-fetch-odds {
-      background: rgba(74,222,128,.1);
-      border: 1px solid rgba(74,222,128,.25);
-      border-radius: 10px;
-      color: var(--green);
-      padding: .6rem 1.2rem;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      color: #000;
+      padding: .65rem 1.4rem;
       font-size: .88rem;
-      font-family: inherit;
-      font-weight: 600;
+      font-family: 'Inter', inherit;
+      font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
-      transition: background .15s;
+      transition: background .15s, transform .1s;
       align-self: flex-end;
+      letter-spacing: .02em;
     }
-    .btn-fetch-odds:hover:not(:disabled) { background: rgba(74,222,128,.18); }
-    .btn-fetch-odds:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-fetch-odds:hover:not(:disabled) { background: #00e65e; transform: translateY(-1px); }
+    .btn-fetch-odds:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 
     .api-quota {
       font-size: .7rem;
@@ -316,19 +370,20 @@
     .btn-add-bookie:hover { background: rgba(124,106,247,.14); }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent), #5b4de0);
-      color: #fff;
+      background: var(--accent);
+      color: #000;
       border: none;
-      border-radius: 10px;
-      padding: .7rem 1.8rem;
+      border-radius: var(--radius);
+      padding: .75rem 2rem;
       font-size: .95rem;
-      font-family: inherit;
-      font-weight: 600;
+      font-family: 'Inter', inherit;
+      font-weight: 800;
       cursor: pointer;
-      transition: opacity .15s, transform .1s;
+      transition: background .15s, transform .1s;
+      letter-spacing: .02em;
     }
 
-    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-primary:hover { background: #00e65e; transform: translateY(-1px); }
 
     .btn-danger {
       background: rgba(248,113,113,.08);
@@ -729,9 +784,9 @@
 
     /* ── Hero Section ────────────────────────────────────────── */
     .hero {
-      background: linear-gradient(160deg, #0f0f1a 0%, #141428 40%, #0d1f3c 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 3.5rem 2rem 2.5rem;
+      background: linear-gradient(180deg, #0d1520 0%, #080c14 100%);
+      border-bottom: 1px solid var(--border2);
+      padding: 3rem 2rem 2.5rem;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -739,81 +794,83 @@
     .hero::before {
       content: '';
       position: absolute;
-      top: -60px; left: 50%;
-      transform: translateX(-50%);
-      width: 600px; height: 300px;
-      background: radial-gradient(ellipse, rgba(124,106,247,.18) 0%, transparent 70%);
-      pointer-events: none;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
     }
     .hero-eyebrow {
-      display: inline-block;
-      background: rgba(124,106,247,.15);
-      border: 1px solid rgba(124,106,247,.3);
-      border-radius: 20px;
-      padding: .25rem .9rem;
-      font-size: .72rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(0,200,83,.1);
+      border: 1px solid rgba(0,200,83,.25);
+      border-radius: 4px;
+      padding: .3rem .9rem;
+      font-size: .7rem;
       font-weight: 700;
-      letter-spacing: .1em;
+      letter-spacing: .12em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
     }
     .hero h2 {
-      font-size: clamp(1.7rem, 5vw, 2.8rem);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
       font-weight: 900;
-      line-height: 1.15;
-      background: linear-gradient(135deg, #ffffff 0%, #c4b8ff 50%, var(--accent2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: .9rem;
-      letter-spacing: -.02em;
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: .75rem;
+      letter-spacing: -.01em;
+      text-transform: uppercase;
     }
+    .hero h2 span { color: var(--accent); }
     .hero p {
-      font-size: 1rem;
+      font-size: .95rem;
       color: var(--muted);
-      max-width: 520px;
+      max-width: 480px;
       margin: 0 auto 2rem;
-      line-height: 1.65;
+      line-height: 1.6;
     }
     .hero-stats {
       display: flex;
       gap: 0;
       justify-content: center;
       flex-wrap: wrap;
-      margin: 0 auto 1.5rem;
-      max-width: 560px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      margin: 0 auto 2rem;
+      max-width: 520px;
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
       overflow: hidden;
     }
     .hero-stat {
       flex: 1;
-      min-width: 100px;
+      min-width: 90px;
       padding: 1rem .5rem;
-      border-right: 1px solid var(--border);
+      border-right: 1px solid var(--border2);
+      background: var(--surface);
     }
     .hero-stat:last-child { border-right: none; }
     .hero-stat-number {
-      font-size: 1.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
       font-weight: 900;
       color: #fff;
       line-height: 1;
     }
-    .hero-stat-number span { color: var(--accent2); }
+    .hero-stat-number span { color: var(--accent); }
     .hero-stat-label {
-      font-size: .68rem;
+      font-size: .62rem;
       color: var(--muted);
       margin-top: .3rem;
       font-weight: 600;
-      letter-spacing: .04em;
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
     .hero-scroll {
       font-size: .75rem;
       color: var(--muted);
-      margin-top: 1.5rem;
-      opacity: .6;
+      margin-top: 1rem;
+      letter-spacing: .05em;
     }
 
     /* ── Buchmacher-Vergleich ─────────────────────────────────── */
@@ -1079,16 +1136,22 @@
 <body>
 
 <header>
-  <span class="logo">⚽</span>
-  <h1>WM 2026 · Quoten-Analyse</h1>
-  <span class="subtitle">Value Betting Tool</span>
+  <a class="header-logo" href="#">
+    <span class="header-logo-icon">TV</span>
+    <h1>TIPP-VALUE</h1>
+  </a>
+  <div class="header-live">
+    <div class="header-live-dot"></div>
+    Live Quoten
+  </div>
+  <span class="header-18">18+</span>
 </header>
 
 <!-- Hero -->
 <div class="hero">
-  <div class="hero-eyebrow">⚽ FIFA WM 2026 · Live Quotenvergleich</div>
-  <h2>Finde Value Bets.<br>Schlage die Buchmacher.</h2>
-  <p>Vergleiche live Wettquoten aller großen Anbieter, erkenne wo du einen echten Vorteil hast — und sichere dir bis zu 100&nbsp;€ Neukundenbonus.</p>
+  <div class="hero-eyebrow">⚽ FIFA WM 2026 · Echtzeit-Quotenvergleich</div>
+  <h2>Schlage die<br><span>Buchmacher.</span></h2>
+  <p>Vergleiche live Wettquoten aller großen Anbieter und erkenne sofort wo du einen echten Vorteil hast.</p>
   <div class="hero-stats">
     <div class="hero-stat">
       <div class="hero-stat-number">6<span>+</span></div>
@@ -1152,21 +1215,11 @@
     <!-- API Bar -->
     <div class="api-bar">
 
-      <!-- Schritt 1: API-Verbindung -->
-      <div class="api-step">
-        <span class="api-step-label">① API-Verbindung</span>
-        <div class="api-step-body">
-          <div class="api-key-wrap">
-            <label for="apiKeyInput">The Odds API · Schlüssel</label>
-            <input type="password" id="apiKeyInput" class="api-key-input"
-                   placeholder="API-Key einmalig eintragen" autocomplete="off" />
-          </div>
-        </div>
-      </div>
+      <input type="hidden" id="apiKeyInput" />
 
-      <!-- Schritt 2: Quoten laden -->
+      <!-- Quoten laden -->
       <div class="api-step">
-        <span class="api-step-label">② Spiele &amp; Quoten laden</span>
+        <span class="api-step-label">Wettbewerb &amp; Quoten</span>
         <div class="api-step-body">
           <div class="sport-wrap">
             <label for="sportSelect">Wettbewerb</label>
@@ -1450,8 +1503,6 @@
   function init() {
     for (let i = 0; i < DEFAULT_BM_COUNT; i++) addBookmakerRow();
 
-    const saved = localStorage.getItem(API_KEY_LS);
-    if (saved) document.getElementById('apiKeyInput').value = saved;
 
     renderAll();
     renderBookmakers();
@@ -1608,12 +1659,10 @@
   }
 
   // ── API key helper ────────────────────────────────────────────────────────────
+  const EMBEDDED_KEY = 'fc23c1753ca043f9a04d4e29dc8f37ec';
+
   function getApiKey() {
-    const input = document.getElementById('apiKeyInput').value.trim();
-    const stored = localStorage.getItem(API_KEY_LS) || '';
-    const key = input || stored;
-    if (input) localStorage.setItem(API_KEY_LS, input);
-    return key;
+    return EMBEDDED_KEY;
   }
 
   // ── API: Events + eingebettete h2h-Quoten laden ──────────────────────────────
