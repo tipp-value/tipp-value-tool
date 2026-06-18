@@ -1495,21 +1495,10 @@
   }
 
   // ── API key helper ────────────────────────────────────────────────────────────
-  const EMBEDDED_KEY = 'ba37feb4c4a415452223c416dbede846';
-
-  function getApiKey() {
-    return EMBEDDED_KEY;
-  }
+  function getApiKey() { return ''; }
 
   // ── API: Events + eingebettete h2h-Quoten laden ──────────────────────────────
   async function fetchAndShowEvents() {
-    const key = getApiKey();
-    if (!key) {
-      showToast('Bitte zuerst einen API-Schlüssel eingeben.', 'error');
-      document.getElementById('apiKeyInput').focus();
-      return;
-    }
-
     const sport = document.getElementById('sportSelect').value;
     const btn   = document.getElementById('btnFetchOdds');
     btn.disabled = true;
@@ -1517,8 +1506,7 @@
 
     try {
       // The Odds API: ein einziger Call liefert Events + Quoten aller Buchmacher
-      const url = `${API_BASE}/sports/${encodeURIComponent(sport)}/odds` +
-                  `?apiKey=${encodeURIComponent(key)}&regions=eu,uk&markets=h2h&oddsFormat=decimal`;
+      const url = `/.netlify/functions/odds-proxy?sport=${encodeURIComponent(sport)}`;
 
       const res = await fetch(url);
 
