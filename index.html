@@ -1175,117 +1175,37 @@
 
 <div class="container">
 
-  <!-- Value Betting Erklärung -->
-  <div class="card" style="margin-top:1.5rem">
-    <p class="section-label">So funktioniert's</p>
-    <p class="card-title">Was ist Value Betting?</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:.5rem">
-      <div style="display:flex;gap:.75rem;align-items:flex-start">
-        <span style="font-size:1.5rem;flex-shrink:0">①</span>
-        <div>
-          <strong style="font-size:.9rem">Quoten abrufen</strong>
-          <p style="font-size:.78rem;color:var(--muted);margin-top:.2rem">Wähle ein WM-Spiel und lade automatisch die aktuellen Quoten aller Buchmacher.</p>
-        </div>
-      </div>
-      <div style="display:flex;gap:.75rem;align-items:flex-start">
-        <span style="font-size:1.5rem;flex-shrink:0">②</span>
-        <div>
-          <strong style="font-size:.9rem">Wahrscheinlichkeit schätzen</strong>
-          <p style="font-size:.78rem;color:var(--muted);margin-top:.2rem">Trage ein, wie wahrscheinlich du dieses Ergebnis einschätzt — unabhängig von den Buchmachern.</p>
-        </div>
-      </div>
-      <div style="display:flex;gap:.75rem;align-items:flex-start">
-        <span style="font-size:1.5rem;flex-shrink:0">③</span>
-        <div>
-          <strong style="font-size:.9rem">Value erkennen</strong>
-          <p style="font-size:.78rem;color:var(--muted);margin-top:.2rem">Liegt deine Schätzung über der impliziten Wahrscheinlichkeit eines Buchmachers, hast du einen Value Bet gefunden.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Rate-Limit-Banner -->
   <div class="rate-limit-banner" id="rateLimitBanner" role="alert"></div>
 
-  <!-- Input -->
-  <div class="card">
-    <p class="section-label">Neue Analyse</p>
-    <p class="card-title">Spiel &amp; Markt eintragen</p>
-
-    <!-- API Bar -->
-    <div class="api-bar">
-
-      <input type="hidden" id="apiKeyInput" />
-
-      <!-- Quoten laden -->
-      <div class="api-step">
-        <span class="api-step-label">Wettbewerb &amp; Quoten</span>
-        <div class="api-step-body">
-          <div class="sport-wrap">
-            <label for="sportSelect">Wettbewerb</label>
-            <select id="sportSelect" class="sport-select">
-              <option value="soccer_fifa_world_cup">FIFA WM 2026</option>
-              <option value="soccer_uefa_champs_league">Champions League</option>
-              <option value="soccer_uefa_europa_league">Europa League</option>
-              <option value="soccer_germany_bundesliga">Bundesliga</option>
-              <option value="soccer_germany_bundesliga2">2. Bundesliga</option>
-              <option value="soccer_epl">Premier League</option>
-              <option value="soccer_france_ligue_one">Ligue 1</option>
-              <option value="soccer_spain_la_liga">La Liga</option>
-              <option value="soccer_italy_serie_a">Serie A</option>
-            </select>
-          </div>
-          <button class="btn-fetch-odds" id="btnFetchOdds" onclick="fetchAndShowEvents()">
-            ↓ Quoten abrufen
-          </button>
-        </div>
+  <!-- Quotenvergleich Tool -->
+  <div class="card" style="margin-top:1.5rem">
+    <input type="hidden" id="apiKeyInput" />
+    <div style="display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:180px">
+        <label for="sportSelect" style="font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Wettbewerb</label>
+        <select id="sportSelect" class="sport-select">
+          <option value="soccer_fifa_world_cup">⚽ FIFA WM 2026</option>
+          <option value="soccer_uefa_champs_league">Champions League</option>
+          <option value="soccer_uefa_europa_league">Europa League</option>
+          <option value="soccer_germany_bundesliga">Bundesliga</option>
+          <option value="soccer_germany_bundesliga2">2. Bundesliga</option>
+          <option value="soccer_epl">Premier League</option>
+          <option value="soccer_france_ligue_one">Ligue 1</option>
+          <option value="soccer_spain_la_liga">La Liga</option>
+          <option value="soccer_italy_serie_a">Serie A</option>
+        </select>
       </div>
-
+      <button class="btn-fetch-odds" id="btnFetchOdds" onclick="fetchAndShowEvents()">
+        Spiele & Quoten laden →
+      </button>
     </div>
-
-    <!-- Game / Market Fields -->
-    <div class="form-row">
-      <div class="form-group">
-        <label for="gameInput">Spiel</label>
-        <input type="text" id="gameInput" placeholder="z.B. Spanien vs. Frankreich" />
-      </div>
-      <div class="form-group">
-        <label for="marketInput">Markt</label>
-        <input type="text" id="marketInput" placeholder="z.B. Spanien gewinnt" />
-      </div>
-    </div>
-
-    <div class="form-group" style="max-width:340px; margin-bottom:.25rem;">
-      <label for="ownProbInput">Eigene Wahrscheinlichkeit (%)</label>
-      <input type="number" id="ownProbInput" placeholder="z.B. 28" min="0.1" max="100" step="0.1" />
-      <p class="field-help">
-        Wie wahrscheinlich hältst <em>du</em> dieses Ergebnis — unabhängig von den Buchmacher-Quoten?<br>
-        Beispiel: Du glaubst, Spanien gewinnt mit 35&nbsp;% Chance → trage <strong>35</strong> ein.
-        Liegt deine Schätzung über der impliziten Wahrscheinlichkeit eines Buchmachers, zeigt das Tool „Value".
-      </p>
-    </div>
-
-    <p class="bookie-section-label">Anbieter &amp; Quoten</p>
-
-    <div class="bookmaker-rows" id="bookmakersContainer"></div>
-
-    <button class="btn-add-bookie" onclick="addBookmakerRow()">+ Anbieter manuell hinzufügen</button>
-
-    <button class="btn-primary" onclick="saveAnalysis()">Analysieren &amp; Speichern</button>
   </div>
 
-  <!-- Results -->
-  <div class="results-header">
-    <div>
-      <p class="section-label">Gespeicherte Analysen</p>
-      <h2>Alle Märkte</h2>
-    </div>
-    <span class="badge" id="countBadge">0 Märkte</span>
-  </div>
+  <!-- Vergleichsergebnis -->
+  <div id="comparisonResult"></div>
 
-  <div id="resultsList"></div>
-
-  <!-- Buchmacher Vergleich — nach unten verschoben -->
+  <!-- Buchmacher Vergleich -->
   <div class="bm-section" style="margin-top:2.5rem">
     <p class="section-label">Partnerlinks</p>
     <h2 style="font-size:1.05rem;font-weight:700;margin-bottom:.25rem">Empfohlene Buchmacher</h2>
@@ -1501,12 +1421,7 @@
 
   // ── Init ─────────────────────────────────────────────────────────────────────
   function init() {
-    for (let i = 0; i < DEFAULT_BM_COUNT; i++) addBookmakerRow();
-
-
-    renderAll();
     renderBookmakers();
-
     if (localStorage.getItem('cookie_ok')) {
       document.getElementById('cookieBanner').classList.add('hidden');
     }
@@ -1526,140 +1441,61 @@
     container.appendChild(row);
   }
 
-  // ── Save Analysis ─────────────────────────────────────────────────────────────
-  function saveAnalysis() {
-    const game    = document.getElementById('gameInput').value.trim();
-    const market  = document.getElementById('marketInput').value.trim();
-    const ownProb = parseFloat(document.getElementById('ownProbInput').value);
+  // ── Quotenvergleich rendern ───────────────────────────────────────────────────
+  function renderComparisonTable(rows, matchName, outcomeName) {
+    rows.sort((a, b) => b.odds - a.odds);
+    const avgImpl = rows.reduce((s, r) => s + (1 / r.odds) * 100, 0) / rows.length;
 
-    if (!game || !market) { showToast('Bitte Spiel und Markt eintragen.', 'error'); return; }
-    if (isNaN(ownProb) || ownProb <= 0 || ownProb > 100) {
-      showToast('Bitte eine gültige Wahrscheinlichkeit (0–100 %) eintragen.', 'error'); return;
-    }
+    const tableRows = rows.map((r, i) => {
+      const impl      = (1 / r.odds) * 100;
+      const vsMarket  = avgImpl - impl;
+      const isBest    = i === 0;
+      let pillClass, pillLabel;
+      if (vsMarket > 1.5)       { pillClass = 'good'; pillLabel = 'Value'; }
+      else if (vsMarket < -1.5) { pillClass = 'bad';  pillLabel = 'Schlechter'; }
+      else                      { pillClass = 'flat'; pillLabel = 'Markt'; }
 
-    const bookmakers = [];
-    document.querySelectorAll('.bookmaker-row').forEach(row => {
-      const name = row.querySelector('.bookie-name').value.trim();
-      const odds = parseFloat(row.querySelector('.bookie-odds').value);
-      if (name && !isNaN(odds) && odds > 1) {
-        const impliedProb = (1 / odds) * 100;
-        const diff = ownProb - impliedProb;
-        bookmakers.push({ name, odds, impliedProb, diff });
-      }
-    });
-
-    if (bookmakers.length === 0) {
-      showToast('Bitte mindestens einen Anbieter mit gültiger Quote eintragen.', 'error'); return;
-    }
-
-    bookmakers.sort((a, b) => b.diff - a.diff);
-
-    analyses.unshift({
-      id: Date.now(),
-      game, market, ownProb, bookmakers,
-      date: new Date().toLocaleDateString('de-DE')
-    });
-
-    persist();
-
-    document.getElementById('gameInput').value  = '';
-    document.getElementById('marketInput').value = '';
-    document.getElementById('ownProbInput').value = '';
-    document.getElementById('bookmakersContainer').innerHTML = '';
-    for (let i = 0; i < DEFAULT_BM_COUNT; i++) addBookmakerRow();
-
-    renderAll();
-    showToast('Analyse gespeichert');
-  }
-
-  function deleteAnalysis(id) {
-    if (!confirm('Analyse wirklich löschen?')) return;
-    analyses = analyses.filter(a => a.id !== id);
-    persist();
-    renderAll();
-  }
-
-  function persist() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(analyses));
-  }
-
-  // ── Render ────────────────────────────────────────────────────────────────────
-  function renderAll() {
-    document.getElementById('countBadge').textContent =
-      `${analyses.length} ${analyses.length === 1 ? 'Markt' : 'Märkte'}`;
-    const list = document.getElementById('resultsList');
-
-    if (analyses.length === 0) {
-      list.innerHTML = `
-        <div class="empty">
-          <div class="icon">📊</div>
-          <p>Noch keine Analysen gespeichert.<br>Trage oben dein erstes Spiel ein.</p>
-        </div>`;
-      return;
-    }
-
-    list.innerHTML = analyses.map(a => renderCard(a)).join('');
-  }
-
-  function renderCard(a) {
-    const rows = a.bookmakers.map((b, i) => {
-      const sign = b.diff > 0 ? '+' : '';
-      let diffClass, pillClass, pillLabel;
-      if (b.diff > 2)       { diffClass = 'diff-positive'; pillClass = 'good'; pillLabel = 'Value'; }
-      else if (b.diff < -2) { diffClass = 'diff-negative'; pillClass = 'bad';  pillLabel = 'Kein Value'; }
-      else                  { diffClass = 'diff-neutral';  pillClass = 'flat'; pillLabel = 'Neutral'; }
-
-      const affiliateLink = b.diff > 2 ? getAffiliateLink(b.name) : null;
+      const affiliateLink = getAffiliateLink(r.name);
       const betBtn = affiliateLink
-        ? `<a href="${affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-bet">Jetzt wetten →</a>`
+        ? `<a href="${affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-bet">Wetten →</a>`
         : '';
 
       return `
-        <tr>
-          <td><span class="rank${i === 0 ? ' top' : ''}">${i + 1}</span></td>
-          <td><strong>${esc(b.name)}</strong></td>
-          <td>${b.odds.toFixed(2)}</td>
-          <td>${b.impliedProb.toFixed(1)} %</td>
-          <td class="${diffClass}">${sign}${b.diff.toFixed(1)} %</td>
+        <tr${isBest ? ' style="background:rgba(0,200,83,.05)"' : ''}>
+          <td><span class="rank${isBest ? ' top' : ''}">${i + 1}</span></td>
+          <td><strong>${esc(r.name)}</strong>${isBest ? ' <span style="color:var(--accent);font-size:.68rem;font-weight:700">BESTE</span>' : ''}</td>
+          <td style="font-family:\'Barlow Condensed\',monospace;font-size:1.1rem;font-weight:700;color:${isBest ? 'var(--accent)' : 'var(--text)'}">${r.odds.toFixed(2)}</td>
+          <td>${impl.toFixed(1)}%</td>
+          <td class="${vsMarket > 0 ? 'diff-positive' : vsMarket < 0 ? 'diff-negative' : 'diff-neutral'}">${vsMarket > 0 ? '+' : ''}${vsMarket.toFixed(1)}%</td>
           <td><span class="value-pill ${pillClass}">${pillLabel}</span>${betBtn}</td>
         </tr>`;
     }).join('');
 
-    return `
-      <div class="analysis-card">
+    document.getElementById('comparisonResult').innerHTML = `
+      <div class="analysis-card" style="margin-top:.75rem">
         <div class="analysis-card-header">
           <div class="game-info">
-            <h3>${esc(a.game)}</h3>
-            <div class="market-tag">${esc(a.market)} &nbsp;·&nbsp; ${a.date}</div>
+            <h3>${esc(matchName)}</h3>
+            <div class="market-tag">${esc(outcomeName)} · ${rows.length} Buchmacher · Sortiert nach höchster Quote</div>
           </div>
-          <div class="card-actions">
-            <div class="own-prob-block">
-              <div class="op-label">Eigene Schätzung</div>
-              <div class="op-value">${a.ownProb.toFixed(1)} %</div>
-            </div>
-            <button class="btn-danger" onclick="deleteAnalysis(${a.id})">Löschen</button>
-          </div>
+          <button class="btn-danger" onclick="document.getElementById('comparisonResult').innerHTML=''">✕ Schließen</button>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Anbieter</th>
-                <th>Quote</th>
-                <th>Impl. Wahrsch.</th>
-                <th>Differenz</th>
-                <th>Bewertung</th>
+                <th>#</th><th>Anbieter</th><th>Quote</th><th>Impl. %</th><th>vs. Markt</th><th>Bewertung</th>
               </tr>
             </thead>
-            <tbody>${rows}</tbody>
+            <tbody>${tableRows}</tbody>
           </table>
         </div>
+        <p style="font-size:.68rem;color:var(--muted);margin-top:.75rem">„Value" = bessere Quote als Marktdurchschnitt · „vs. Markt" zeigt Abweichung von Ø impliziter Wahrscheinlichkeit</p>
       </div>`;
   }
 
   // ── API key helper ────────────────────────────────────────────────────────────
-  const EMBEDDED_KEY = 'fc23c1753ca043f9a04d4e29dc8f37ec';
+  const EMBEDDED_KEY = 'ba37feb4c4a415452223c416dbede846';
 
   function getApiKey() {
     return EMBEDDED_KEY;
@@ -1813,9 +1649,6 @@
     pendingEventIdx = eventIndex;
     const ev = currentEvents[eventIndex];
 
-    // Spielfeld sofort befüllen (vor Outcome-Wahl)
-    document.getElementById('gameInput').value = `${ev.home_team} vs. ${ev.away_team}`;
-
     // Outcomes aus dem ersten Buchmacher mit h2h-Markt extrahieren
     const outcomeNames = [];
     for (const bm of (ev.bookmakers || [])) {
@@ -1841,10 +1674,11 @@
       `<button class="btn-back" onclick="backToEventList()">← Zurück zur Spielliste</button>`;
   }
 
-  // ── Apply: Quoten aus Event direkt übernehmen (kein zweiter API-Aufruf nötig) ─
+  // ── Apply: Quoten direkt als Vergleichstabelle anzeigen ──────────────────────
   function applyOutcome(outcomeIndex) {
-    const outcome = currentOutcomes[outcomeIndex];
-    const ev      = currentEvents[pendingEventIdx];
+    const outcome   = currentOutcomes[outcomeIndex];
+    const ev        = currentEvents[pendingEventIdx];
+    const matchName = `${ev.home_team} vs. ${ev.away_team}`;
 
     const rows = [];
     for (const bm of (ev.bookmakers || [])) {
@@ -1859,27 +1693,17 @@
       document.getElementById('modalMeta').textContent = 'Keine Quoten verfügbar';
       document.getElementById('modalBody').innerHTML = `
         <div style="padding:1.1rem .9rem;color:var(--red);font-size:.86rem;line-height:1.5">
-          Für dieses Ergebnis wurden keine Quoten in der API-Antwort gefunden.
+          Für dieses Ergebnis wurden keine Quoten gefunden.
         </div>
         <button class="btn-back" onclick="showOutcomePicker(${pendingEventIdx})">← Anderes Ergebnis</button>
         <button class="btn-back" onclick="backToEventList()" style="margin-left:.5rem">← Anderes Spiel</button>`;
       return;
     }
 
-    document.getElementById('gameInput').value   = `${ev.home_team} vs. ${ev.away_team}`;
-    document.getElementById('marketInput').value = outcome.displayLabel;
-
-    try {
-      document.getElementById('bookmakersContainer').innerHTML = '';
-      rows.forEach(({ name, odds }) => addBookmakerRow(name, odds));
-
-      closeModal();
-      showToast(`${rows.length} Buchmacher-Quoten für „${outcome.displayLabel}" geladen`);
-      document.getElementById('ownProbInput').focus();
-    } catch (e) {
-      showToast(`Fehler beim Laden der Quoten: ${e.message}`, 'error');
-      document.getElementById('modalMeta').textContent = 'Ergebnis für Siegmarkt wählen';
-    }
+    closeModal();
+    renderComparisonTable(rows, matchName, outcome.displayLabel);
+    showToast(`${rows.length} Quoten für „${outcome.displayLabel}" geladen`);
+    document.getElementById('comparisonResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ── Rate-Limit-Banner ─────────────────────────────────────────────────────────
