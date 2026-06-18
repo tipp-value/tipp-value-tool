@@ -940,6 +940,45 @@
     }
     .btn-bet:hover { opacity: .8; }
 
+    /* ── Impressum Modal ─────────────────────────────────────── */
+    .impressum-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .impressum-overlay.open { display: flex; }
+    .impressum-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 560px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .impressum-box h2 { font-size: 1.2rem; margin-bottom: 1.25rem; }
+    .impressum-box h3 { font-size: .85rem; font-weight: 700; margin: 1rem 0 .3rem; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; }
+    .impressum-box p { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+    .impressum-box a { color: var(--accent); }
+    .impressum-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
     /* ── Legal Footer ────────────────────────────────────────── */
     .legal-footer {
       background: var(--surface);
@@ -1145,6 +1184,38 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- Impressum Modal -->
+<div class="impressum-overlay" id="impressumOverlay" onclick="if(event.target===this)closeImpressum()">
+  <div class="impressum-box">
+    <button class="impressum-close" onclick="closeImpressum()">×</button>
+    <h2>Impressum</h2>
+
+    <h3>Angaben gemäß § 5 TMG</h3>
+    <p>Jim Hornäk Fernandez<br>
+    Piusstraße 88<br>
+    50823 Köln (Ehrenfeld)<br>
+    Deutschland</p>
+
+    <h3>Kontakt</h3>
+    <p>E-Mail: <a href="mailto:jim.hornaek@gmail.com">jim.hornaek@gmail.com</a></p>
+
+    <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+    <p>Jim Hornäk Fernandez, Piusstraße 88, 50823 Köln</p>
+
+    <h3>Haftungsausschluss</h3>
+    <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte übernehmen wir keine Gewähr. Wettquoten und Bonusangebote können sich jederzeit ändern — maßgeblich sind die Angaben auf den jeweiligen Anbieterseiten.</p>
+
+    <h3>Affiliate-Hinweis</h3>
+    <p>Diese Website enthält Partnerlinks. Bei einer Kontoeröffnung über unsere Links erhalten wir eine Provision. Für den Nutzer entstehen dabei keine Mehrkosten. Alle Empfehlungen sind redaktionell unabhängig.</p>
+
+    <h3>Glücksspiel-Hinweis</h3>
+    <p>Glücksspiel kann süchtig machen. Bitte spiele verantwortungsbewusst. Hilfe und Beratung: <a href="https://www.bzga.de" target="_blank" rel="noopener">bzga.de</a> · <a href="https://www.check-dein-spiel.de" target="_blank" rel="noopener">check-dein-spiel.de</a>. Nur für Personen ab 18 Jahren.</p>
+
+    <h3>Streitschlichtung</h3>
+    <p>Die EU-Kommission stellt eine Plattform zur Online-Streitbeilegung bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>. Wir sind nicht verpflichtet, an einem Streitbeilegungsverfahren teilzunehmen.</p>
+  </div>
+</div>
+
 <!-- Cookie Banner -->
 <div class="cookie-banner" id="cookieBanner">
   <p>Wir verwenden keine Tracking-Cookies. Affiliate-Links kennzeichnen wir transparent. Durch Nutzung der Seite stimmst du unserer <a href="mailto:datenschutz@tipp-value.de">Datenschutzerklärung</a> zu.</p>
@@ -1164,8 +1235,8 @@
   </div>
   <div>
     © 2026 Tipp-Value ·
-    <a href="mailto:impressum@tipp-value.de">Impressum</a> ·
-    <a href="mailto:datenschutz@tipp-value.de">Datenschutz</a> ·
+    <a href="#" onclick="openImpressum();return false;">Impressum</a> ·
+    <a href="mailto:jim.hornaek@gmail.com">Datenschutz &amp; Kontakt</a> ·
     Alle Angaben ohne Gewähr.
   </div>
 </footer>
@@ -1769,6 +1840,8 @@
   // ── Modal helpers ─────────────────────────────────────────────────────────────
   function openModal()  { document.getElementById('modalOverlay').classList.add('open'); }
   function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+  function openImpressum()  { document.getElementById('impressumOverlay').classList.add('open'); }
+  function closeImpressum() { document.getElementById('impressumOverlay').classList.remove('open'); }
 
   // ── Utilities ─────────────────────────────────────────────────────────────────
   function esc(s) {
