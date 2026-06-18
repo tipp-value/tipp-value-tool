@@ -426,29 +426,52 @@
 
     .analysis-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
       margin-bottom: 1rem;
       overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.3);
     }
 
     .analysis-card-header {
-      padding: 1rem 1.4rem;
+      padding: 1rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border2);
       gap: 1rem;
       flex-wrap: wrap;
+      background: var(--surface2);
     }
 
-    .game-info h3 { font-size: .98rem; font-weight: 700; }
+    .game-info h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
 
-    .game-info .market-tag { font-size: .78rem; color: var(--muted); margin-top: .1rem; }
+    .game-info .market-tag {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-top: .2rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
 
-    .own-prob-block { text-align: right; }
-    .own-prob-block .op-label { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
-    .own-prob-block .op-value { font-size: 1.35rem; font-weight: 800; color: var(--accent); line-height: 1.2; }
+    .outcome-badge {
+      background: var(--accent);
+      color: #000;
+      font-size: .65rem;
+      font-weight: 800;
+      padding: .15rem .5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
 
     .card-actions { display: flex; align-items: center; gap: .75rem; }
 
@@ -461,56 +484,82 @@
     }
 
     thead th {
-      background: rgba(255,255,255,.025);
-      padding: .6rem 1.2rem;
+      background: rgba(0,0,0,.25);
+      padding: .55rem 1rem;
       text-align: left;
-      font-size: .65rem;
+      font-size: .6rem;
       font-weight: 700;
-      letter-spacing: .12em;
+      letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--muted);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border2);
     }
 
     tbody td {
-      padding: .72rem 1.2rem;
+      padding: .75rem 1rem;
       border-bottom: 1px solid rgba(255,255,255,.04);
+      vertical-align: middle;
     }
 
     tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(255,255,255,.025); }
 
-    tbody tr:hover td { background: rgba(255,255,255,.018); }
+    .odds-value {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .bm-name-cell {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .bm-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
 
     .rank {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
       font-size: .7rem;
-      font-weight: 700;
-      background: rgba(124,106,247,.1);
-      color: var(--accent);
+      font-weight: 800;
+      background: var(--surface3);
+      color: var(--muted);
     }
 
-    .rank.top { background: rgba(74,222,128,.13); color: var(--green); }
+    .rank.top {
+      background: var(--accent);
+      color: #000;
+    }
 
     .diff-positive { color: var(--green); font-weight: 700; }
     .diff-negative { color: var(--red); }
     .diff-neutral  { color: var(--muted); }
 
     .value-pill {
-      display: inline-block;
-      padding: .15rem .55rem;
-      border-radius: 100px;
-      font-size: .75rem;
-      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      padding: .22rem .65rem;
+      border-radius: 4px;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
 
-    .value-pill.good { background: rgba(74,222,128,.12); color: var(--green); border: 1px solid rgba(74,222,128,.2); }
-    .value-pill.bad  { background: rgba(248,113,113,.1);  color: var(--red);   border: 1px solid rgba(248,113,113,.2); }
-    .value-pill.flat { background: rgba(136,136,170,.1);  color: var(--muted); border: 1px solid rgba(136,136,170,.15); }
+    .value-pill.good { background: var(--accent); color: #000; }
+    .value-pill.bad  { background: rgba(255,68,68,.15); color: var(--red); border: 1px solid rgba(255,68,68,.25); }
+    .value-pill.flat { background: var(--surface3); color: var(--muted); }
 
     .empty {
       text-align: center;
@@ -540,30 +589,38 @@
 
     .modal-box {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1px solid var(--border2);
+      border-top: 2px solid var(--accent);
+      border-radius: var(--radius-lg);
       width: 100%;
-      max-width: 540px;
-      max-height: 82vh;
+      max-width: 560px;
+      max-height: 84vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+      box-shadow: 0 32px 80px rgba(0,0,0,.8);
     }
 
     .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.4rem;
-      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border2);
       gap: 1rem;
+      background: var(--surface2);
     }
 
-    .modal-head-title { font-weight: 700; font-size: .98rem; }
+    .modal-head-title {
+      font-weight: 800;
+      font-size: .95rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
 
     .modal-head-meta {
-      font-size: .75rem;
+      font-size: .72rem;
       color: var(--muted);
       flex: 1;
     }
@@ -599,29 +656,34 @@
     }
 
     .event-item {
-      padding: .75rem 1rem;
-      border-radius: 10px;
+      padding: .8rem 1rem;
+      border-radius: var(--radius);
       background: var(--surface2);
       cursor: pointer;
-      transition: background .13s, border-color .13s;
-      border: 1px solid transparent;
+      transition: background .13s, border-color .13s, transform .1s;
+      border: 1px solid var(--border);
     }
 
     .event-item:hover {
-      background: rgba(124,106,247,.1);
-      border-color: rgba(124,106,247,.22);
+      background: var(--surface3);
+      border-color: var(--accent);
+      transform: translateX(2px);
     }
 
     .event-teams {
-      font-size: .92rem;
-      font-weight: 600;
+      font-size: .9rem;
+      font-weight: 700;
+      font-family: 'Barlow Condensed', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .03em;
     }
 
     .event-teams .vs {
       color: var(--muted);
       font-weight: 400;
       margin: 0 .35rem;
-      font-size: .82rem;
+      font-size: .8rem;
+      text-transform: lowercase;
     }
 
     .event-meta {
@@ -1447,27 +1509,34 @@
     const avgImpl = rows.reduce((s, r) => s + (1 / r.odds) * 100, 0) / rows.length;
 
     const tableRows = rows.map((r, i) => {
-      const impl      = (1 / r.odds) * 100;
-      const vsMarket  = avgImpl - impl;
-      const isBest    = i === 0;
+      const impl     = (1 / r.odds) * 100;
+      const vsMarket = avgImpl - impl;
+      const isBest   = i === 0;
       let pillClass, pillLabel;
       if (vsMarket > 1.5)       { pillClass = 'good'; pillLabel = 'Value'; }
-      else if (vsMarket < -1.5) { pillClass = 'bad';  pillLabel = 'Schlechter'; }
+      else if (vsMarket < -1.5) { pillClass = 'bad';  pillLabel = 'Niedrig'; }
       else                      { pillClass = 'flat'; pillLabel = 'Markt'; }
 
+      const bm            = BOOKMAKERS.find(b => r.name.toLowerCase().includes(b.key));
+      const dotColor      = bm ? bm.color : '#555';
       const affiliateLink = getAffiliateLink(r.name);
-      const betBtn = affiliateLink
+      const betBtn        = affiliateLink
         ? `<a href="${affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-bet">Wetten →</a>`
         : '';
 
       return `
-        <tr${isBest ? ' style="background:rgba(0,200,83,.05)"' : ''}>
-          <td><span class="rank${isBest ? ' top' : ''}">${i + 1}</span></td>
-          <td><strong>${esc(r.name)}</strong>${isBest ? ' <span style="color:var(--accent);font-size:.68rem;font-weight:700">BESTE</span>' : ''}</td>
-          <td style="font-family:\'Barlow Condensed\',monospace;font-size:1.1rem;font-weight:700;color:${isBest ? 'var(--accent)' : 'var(--text)'}">${r.odds.toFixed(2)}</td>
-          <td>${impl.toFixed(1)}%</td>
+        <tr${isBest ? ' style="background:rgba(0,200,83,.06);border-left:3px solid var(--accent)"' : ''}>
+          <td><span class="rank${isBest ? ' top' : ''}">${isBest ? '★' : i + 1}</span></td>
+          <td>
+            <div class="bm-name-cell">
+              <div class="bm-dot" style="background:${dotColor}"></div>
+              <strong>${esc(r.name)}</strong>
+            </div>
+          </td>
+          <td><span class="odds-value" style="color:${isBest ? 'var(--accent)' : 'var(--text)'}">${r.odds.toFixed(2)}</span></td>
+          <td style="color:var(--muted)">${impl.toFixed(1)}%</td>
           <td class="${vsMarket > 0 ? 'diff-positive' : vsMarket < 0 ? 'diff-negative' : 'diff-neutral'}">${vsMarket > 0 ? '+' : ''}${vsMarket.toFixed(1)}%</td>
-          <td><span class="value-pill ${pillClass}">${pillLabel}</span>${betBtn}</td>
+          <td><span class="value-pill ${pillClass}">${pillLabel}</span> ${betBtn}</td>
         </tr>`;
     }).join('');
 
@@ -1476,9 +1545,12 @@
         <div class="analysis-card-header">
           <div class="game-info">
             <h3>${esc(matchName)}</h3>
-            <div class="market-tag">${esc(outcomeName)} · ${rows.length} Buchmacher · Sortiert nach höchster Quote</div>
+            <div class="market-tag">
+              <span class="outcome-badge">${esc(outcomeName)}</span>
+              ${rows.length} Buchmacher · Beste Quote zuerst
+            </div>
           </div>
-          <button class="btn-danger" onclick="document.getElementById('comparisonResult').innerHTML=''">✕ Schließen</button>
+          <button class="btn-danger" onclick="document.getElementById('comparisonResult').innerHTML=''">✕</button>
         </div>
         <div class="table-wrap">
           <table>
@@ -1490,7 +1562,6 @@
             <tbody>${tableRows}</tbody>
           </table>
         </div>
-        <p style="font-size:.68rem;color:var(--muted);margin-top:.75rem">„Value" = bessere Quote als Marktdurchschnitt · „vs. Markt" zeigt Abweichung von Ø impliziter Wahrscheinlichkeit</p>
       </div>`;
   }
 
