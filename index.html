@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WM 2026 · Quoten-Analyse</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #1a1a22;
+      --surface2: #22222e;
+      --accent: #7c6af7;
+      --accent2: #f76ac8;
+      --green: #4ade80;
+      --red: #f87171;
+      --text: #e8e8f0;
+      --muted: #8888aa;
+      --border: rgba(255,255,255,.07);
+      --radius: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header .logo { font-size: 1.4rem; }
+
+    header h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 30%, var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header .subtitle {
+      margin-left: auto;
+      font-size: .75rem;
+      color: var(--muted);
+      letter-spacing: .08em;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .section-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .6rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── API Bar ─────────────────────────────────────────────── */
+    .api-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .api-step {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
+    .api-step-label {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .api-step-body {
+      display: flex;
+      gap: .6rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .api-key-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .sport-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      min-width: 160px;
+    }
+
+    .api-key-input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .6rem .9rem;
+      color: var(--text);
+      font-size: .88rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s;
+      width: 100%;
+    }
+    .api-key-input:focus { border-color: var(--accent); }
+    .api-key-input::placeholder { color: var(--muted); opacity: .55; }
+
+    .sport-select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .6rem .9rem;
+      color: var(--text);
+      font-size: .88rem;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      transition: border-color .15s;
+      width: 100%;
+    }
+    .sport-select:focus { border-color: var(--accent); }
+
+    .btn-fetch-odds {
+      background: rgba(74,222,128,.1);
+      border: 1px solid rgba(74,222,128,.25);
+      border-radius: 10px;
+      color: var(--green);
+      padding: .6rem 1.2rem;
+      font-size: .88rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s;
+      align-self: flex-end;
+    }
+    .btn-fetch-odds:hover:not(:disabled) { background: rgba(74,222,128,.18); }
+    .btn-fetch-odds:disabled { opacity: .45; cursor: not-allowed; }
+
+    .api-quota {
+      font-size: .7rem;
+      color: var(--muted);
+      margin-bottom: .15rem;
+      min-height: 1em;
+      align-self: flex-end;
+      white-space: nowrap;
+    }
+
+    /* ── Form ────────────────────────────────────────────────── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+
+    label {
+      font-size: .78rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .6rem .9rem;
+      color: var(--text);
+      font-size: .93rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s;
+      width: 100%;
+    }
+
+    input:focus { border-color: var(--accent); }
+    input::placeholder { color: var(--muted); opacity: .55; }
+
+    .bookie-section-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 1.25rem 0 .7rem;
+    }
+
+    .bookmaker-rows {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      margin-bottom: .75rem;
+    }
+
+    .bookmaker-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: .6rem;
+      align-items: center;
+    }
+
+    .btn-remove {
+      background: rgba(248,113,113,.08);
+      border: 1px solid rgba(248,113,113,.18);
+      border-radius: 8px;
+      color: var(--red);
+      width: 34px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: background .15s;
+      flex-shrink: 0;
+    }
+
+    .btn-remove:hover { background: rgba(248,113,113,.18); }
+
+    .btn-add-bookie {
+      background: rgba(124,106,247,.07);
+      border: 1px dashed rgba(124,106,247,.28);
+      border-radius: 10px;
+      color: var(--accent);
+      padding: .55rem 1rem;
+      cursor: pointer;
+      font-size: .85rem;
+      font-family: inherit;
+      width: 100%;
+      text-align: center;
+      transition: background .15s;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-add-bookie:hover { background: rgba(124,106,247,.14); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #5b4de0);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: .7rem 1.8rem;
+      font-size: .95rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+
+    .btn-danger {
+      background: rgba(248,113,113,.08);
+      border: 1px solid rgba(248,113,113,.18);
+      border-radius: 8px;
+      color: var(--red);
+      padding: .38rem .85rem;
+      font-size: .78rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s;
+      white-space: nowrap;
+    }
+
+    .btn-danger:hover { background: rgba(248,113,113,.18); }
+
+    /* ── Results ─────────────────────────────────────────────── */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1rem;
+    }
+
+    .results-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .badge {
+      background: rgba(124,106,247,.13);
+      border: 1px solid rgba(124,106,247,.22);
+      color: #c4bcff;
+      border-radius: 100px;
+      padding: .22rem .75rem;
+      font-size: .73rem;
+      font-weight: 700;
+    }
+
+    .analysis-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .analysis-card-header {
+      padding: 1rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .game-info h3 { font-size: .98rem; font-weight: 700; }
+
+    .game-info .market-tag { font-size: .78rem; color: var(--muted); margin-top: .1rem; }
+
+    .own-prob-block { text-align: right; }
+    .own-prob-block .op-label { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+    .own-prob-block .op-value { font-size: 1.35rem; font-weight: 800; color: var(--accent); line-height: 1.2; }
+
+    .card-actions { display: flex; align-items: center; gap: .75rem; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+
+    thead th {
+      background: rgba(255,255,255,.025);
+      padding: .6rem 1.2rem;
+      text-align: left;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody td {
+      padding: .72rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover td { background: rgba(255,255,255,.018); }
+
+    .rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: .7rem;
+      font-weight: 700;
+      background: rgba(124,106,247,.1);
+      color: var(--accent);
+    }
+
+    .rank.top { background: rgba(74,222,128,.13); color: var(--green); }
+
+    .diff-positive { color: var(--green); font-weight: 700; }
+    .diff-negative { color: var(--red); }
+    .diff-neutral  { color: var(--muted); }
+
+    .value-pill {
+      display: inline-block;
+      padding: .15rem .55rem;
+      border-radius: 100px;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .value-pill.good { background: rgba(74,222,128,.12); color: var(--green); border: 1px solid rgba(74,222,128,.2); }
+    .value-pill.bad  { background: rgba(248,113,113,.1);  color: var(--red);   border: 1px solid rgba(248,113,113,.2); }
+    .value-pill.flat { background: rgba(136,136,170,.1);  color: var(--muted); border: 1px solid rgba(136,136,170,.15); }
+
+    .empty {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .empty .icon { font-size: 2.8rem; margin-bottom: .9rem; opacity: .45; }
+    .empty p { font-size: .92rem; }
+
+    /* ── Modal ───────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 540px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+    }
+
+    .modal-head-title { font-weight: 700; font-size: .98rem; }
+
+    .modal-head-meta {
+      font-size: .75rem;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: .1rem .35rem;
+      border-radius: 6px;
+      transition: color .12s;
+    }
+    .modal-close:hover { color: var(--text); }
+
+    .modal-body {
+      overflow-y: auto;
+      padding: .75rem;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+
+    .modal-sub-label {
+      font-size: .66rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: .3rem .5rem .4rem;
+    }
+
+    .event-item {
+      padding: .75rem 1rem;
+      border-radius: 10px;
+      background: var(--surface2);
+      cursor: pointer;
+      transition: background .13s, border-color .13s;
+      border: 1px solid transparent;
+    }
+
+    .event-item:hover {
+      background: rgba(124,106,247,.1);
+      border-color: rgba(124,106,247,.22);
+    }
+
+    .event-teams {
+      font-size: .92rem;
+      font-weight: 600;
+    }
+
+    .event-teams .vs {
+      color: var(--muted);
+      font-weight: 400;
+      margin: 0 .35rem;
+      font-size: .82rem;
+    }
+
+    .event-meta {
+      font-size: .73rem;
+      color: var(--muted);
+      margin-top: .18rem;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: .83rem;
+      cursor: pointer;
+      padding: .5rem;
+      text-align: left;
+      transition: color .12s;
+    }
+    .btn-back:hover { color: var(--text); }
+
+    /* ── Toast ───────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--surface);
+      border: 1px solid rgba(74,222,128,.3);
+      color: var(--green);
+      padding: .72rem 1.2rem;
+      border-radius: 12px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,.45);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform .28s ease, opacity .28s ease;
+      z-index: 300;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Liga-Filter im Spiel-Modal ─────────────────────────── */
+    .league-filter-row {
+      padding: .6rem .75rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 1;
+    }
+
+    .league-filter-select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .45rem .75rem;
+      color: var(--text);
+      font-size: .85rem;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      width: 100%;
+      transition: border-color .15s;
+    }
+    .league-filter-select:focus { border-color: var(--accent); }
+
+    /* ── Liga-Gruppen im Spiel-Modal ─────────────────────────── */
+    .league-group { margin-bottom: .1rem; }
+
+    .league-group-header {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .65rem .9rem .3rem;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .league-count {
+      background: rgba(124,106,247,.13);
+      color: #c4bcff;
+      border-radius: 100px;
+      padding: .05rem .45rem;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .event-item-no-odds {
+      opacity: .32;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .event-item-no-odds .event-meta::after {
+      content: ' · keine Quoten verfügbar';
+      color: var(--red);
+    }
+
+    /* ── Rate-Limit-Banner ───────────────────────────────────── */
+    .rate-limit-banner {
+      display: none;
+      align-items: flex-start;
+      gap: .75rem;
+      background: rgba(248,113,113,.08);
+      border: 1px solid rgba(248,113,113,.28);
+      border-radius: 12px;
+      padding: .85rem 1rem;
+      margin-bottom: 1.25rem;
+      font-size: .87rem;
+      line-height: 1.5;
+    }
+    .rate-limit-banner.visible { display: flex; }
+
+    .rl-icon { font-size: 1.15rem; flex-shrink: 0; margin-top: .05rem; }
+
+    .rl-body { flex: 1; }
+
+    .rl-title {
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: .2rem;
+    }
+
+    .rl-countdown {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--red);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
+    }
+
+    .rl-sub { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+
+    .rl-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0 .2rem;
+      flex-shrink: 0;
+      line-height: 1;
+      align-self: flex-start;
+    }
+    .rl-close:hover { color: var(--text); }
+
+    /* ── Hilfetext unter Feldern ─────────────────────────────── */
+    .field-help {
+      font-size: .72rem;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-top: .15rem;
+    }
+
+    @media (max-width: 580px) {
+      .form-row { grid-template-columns: 1fr; }
+      .bookmaker-row { grid-template-columns: 1fr 1fr auto; }
+      header .subtitle { display: none; }
+      .analysis-card-header { flex-direction: column; align-items: flex-start; }
+      .card-actions { width: 100%; justify-content: space-between; }
+      .api-bar { flex-direction: column; align-items: stretch; }
+      .api-bar-actions { flex-direction: row; flex-wrap: wrap; align-items: center; }
+      .btn-fetch-odds { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="logo">⚽</span>
+  <h1>WM 2026 · Quoten-Analyse</h1>
+  <span class="subtitle">Value Betting Tool</span>
+</header>
+
+<div class="container">
+
+  <!-- Rate-Limit-Banner -->
+  <div class="rate-limit-banner" id="rateLimitBanner" role="alert"></div>
+
+  <!-- Input -->
+  <div class="card">
+    <p class="section-label">Neue Analyse</p>
+    <p class="card-title">Spiel &amp; Markt eintragen</p>
+
+    <!-- API Bar -->
+    <div class="api-bar">
+
+      <!-- Schritt 1: API-Verbindung -->
+      <div class="api-step">
+        <span class="api-step-label">① API-Verbindung</span>
+        <div class="api-step-body">
+          <div class="api-key-wrap">
+            <label for="apiKeyInput">The Odds API · Schlüssel</label>
+            <input type="password" id="apiKeyInput" class="api-key-input"
+                   placeholder="API-Key einmalig eintragen" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt 2: Quoten laden -->
+      <div class="api-step">
+        <span class="api-step-label">② Spiele &amp; Quoten laden</span>
+        <div class="api-step-body">
+          <div class="sport-wrap">
+            <label for="sportSelect">Wettbewerb</label>
+            <select id="sportSelect" class="sport-select">
+              <option value="soccer_fifa_world_cup">FIFA WM 2026</option>
+              <option value="soccer_uefa_champs_league">Champions League</option>
+              <option value="soccer_uefa_europa_league">Europa League</option>
+              <option value="soccer_germany_bundesliga">Bundesliga</option>
+              <option value="soccer_germany_bundesliga2">2. Bundesliga</option>
+              <option value="soccer_epl">Premier League</option>
+              <option value="soccer_france_ligue_one">Ligue 1</option>
+              <option value="soccer_spain_la_liga">La Liga</option>
+              <option value="soccer_italy_serie_a">Serie A</option>
+            </select>
+          </div>
+          <button class="btn-fetch-odds" id="btnFetchOdds" onclick="fetchAndShowEvents()">
+            ↓ Quoten abrufen
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Game / Market Fields -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="gameInput">Spiel</label>
+        <input type="text" id="gameInput" placeholder="z.B. Spanien vs. Frankreich" />
+      </div>
+      <div class="form-group">
+        <label for="marketInput">Markt</label>
+        <input type="text" id="marketInput" placeholder="z.B. Spanien gewinnt" />
+      </div>
+    </div>
+
+    <div class="form-group" style="max-width:340px; margin-bottom:.25rem;">
+      <label for="ownProbInput">Eigene Wahrscheinlichkeit (%)</label>
+      <input type="number" id="ownProbInput" placeholder="z.B. 28" min="0.1" max="100" step="0.1" />
+      <p class="field-help">
+        Wie wahrscheinlich hältst <em>du</em> dieses Ergebnis — unabhängig von den Buchmacher-Quoten?<br>
+        Beispiel: Du glaubst, Spanien gewinnt mit 35&nbsp;% Chance → trage <strong>35</strong> ein.
+        Liegt deine Schätzung über der impliziten Wahrscheinlichkeit eines Buchmachers, zeigt das Tool „Value".
+      </p>
+    </div>
+
+    <p class="bookie-section-label">Anbieter &amp; Quoten</p>
+
+    <div class="bookmaker-rows" id="bookmakersContainer"></div>
+
+    <button class="btn-add-bookie" onclick="addBookmakerRow()">+ Anbieter manuell hinzufügen</button>
+
+    <button class="btn-primary" onclick="saveAnalysis()">Analysieren &amp; Speichern</button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-header">
+    <div>
+      <p class="section-label">Gespeicherte Analysen</p>
+      <h2>Alle Märkte</h2>
+    </div>
+    <span class="badge" id="countBadge">0 Märkte</span>
+  </div>
+
+  <div id="resultsList"></div>
+
+</div>
+
+<!-- Event Picker Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-head-title" id="modalTitle">Spiele</span>
+      <span class="modal-head-meta" id="modalMeta"></span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Persistence ──────────────────────────────────────────────────────────────
+  const STORAGE_KEY  = 'wm2026_analyses';
+  const API_KEY_LS   = 'odds_api_key';
+  let analyses = [];
+
+  try { analyses = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { analyses = []; }
+
+  // ── State ────────────────────────────────────────────────────────────────────
+  const DEFAULT_BM_COUNT = 2;   // Anzahl leerer Anbieter-Zeilen beim Start
+  const API_BASE    = 'https://api.the-odds-api.com/v4';
+  let currentEvents      = [];
+  let currentOutcomes    = [];
+  let pendingEventIdx    = null;
+  let allLeagues         = [];   // Wettbewerbe aus der aktuellen Event-Antwort
+  let currentLeagueFilter = ''; // '' = alle anzeigen
+  let rateLimitTimer     = null; // Countdown-Intervall für Rate-Limit-Banner
+
+  // ── Init ─────────────────────────────────────────────────────────────────────
+  function init() {
+    for (let i = 0; i < DEFAULT_BM_COUNT; i++) addBookmakerRow();
+
+    const saved = localStorage.getItem(API_KEY_LS);
+    if (saved) document.getElementById('apiKeyInput').value = saved;
+
+    renderAll();
+  }
+
+  // ── Bookmaker rows ────────────────────────────────────────────────────────────
+  function addBookmakerRow(name = '', odds = '') {
+    const container = document.getElementById('bookmakersContainer');
+    const row = document.createElement('div');
+    row.className = 'bookmaker-row';
+    row.innerHTML = `
+      <input type="text"   class="bookie-name" placeholder="Anbieter (z.B. Tipico)" value="${esc(String(name))}" />
+      <input type="number" class="bookie-odds" placeholder="Quote (z.B. 5.00)" min="1.01" step="0.01"
+             ${odds !== '' ? `value="${Number(odds).toFixed(2)}"` : ''} />
+      <button class="btn-remove" onclick="this.closest('.bookmaker-row').remove()" title="Entfernen">×</button>
+    `;
+    container.appendChild(row);
+  }
+
+  // ── Save Analysis ─────────────────────────────────────────────────────────────
+  function saveAnalysis() {
+    const game    = document.getElementById('gameInput').value.trim();
+    const market  = document.getElementById('marketInput').value.trim();
+    const ownProb = parseFloat(document.getElementById('ownProbInput').value);
+
+    if (!game || !market) { showToast('Bitte Spiel und Markt eintragen.', 'error'); return; }
+    if (isNaN(ownProb) || ownProb <= 0 || ownProb > 100) {
+      showToast('Bitte eine gültige Wahrscheinlichkeit (0–100 %) eintragen.', 'error'); return;
+    }
+
+    const bookmakers = [];
+    document.querySelectorAll('.bookmaker-row').forEach(row => {
+      const name = row.querySelector('.bookie-name').value.trim();
+      const odds = parseFloat(row.querySelector('.bookie-odds').value);
+      if (name && !isNaN(odds) && odds > 1) {
+        const impliedProb = (1 / odds) * 100;
+        const diff = ownProb - impliedProb;
+        bookmakers.push({ name, odds, impliedProb, diff });
+      }
+    });
+
+    if (bookmakers.length === 0) {
+      showToast('Bitte mindestens einen Anbieter mit gültiger Quote eintragen.', 'error'); return;
+    }
+
+    bookmakers.sort((a, b) => b.diff - a.diff);
+
+    analyses.unshift({
+      id: Date.now(),
+      game, market, ownProb, bookmakers,
+      date: new Date().toLocaleDateString('de-DE')
+    });
+
+    persist();
+
+    document.getElementById('gameInput').value  = '';
+    document.getElementById('marketInput').value = '';
+    document.getElementById('ownProbInput').value = '';
+    document.getElementById('bookmakersContainer').innerHTML = '';
+    for (let i = 0; i < DEFAULT_BM_COUNT; i++) addBookmakerRow();
+
+    renderAll();
+    showToast('Analyse gespeichert');
+  }
+
+  function deleteAnalysis(id) {
+    if (!confirm('Analyse wirklich löschen?')) return;
+    analyses = analyses.filter(a => a.id !== id);
+    persist();
+    renderAll();
+  }
+
+  function persist() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(analyses));
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────────
+  function renderAll() {
+    document.getElementById('countBadge').textContent =
+      `${analyses.length} ${analyses.length === 1 ? 'Markt' : 'Märkte'}`;
+    const list = document.getElementById('resultsList');
+
+    if (analyses.length === 0) {
+      list.innerHTML = `
+        <div class="empty">
+          <div class="icon">📊</div>
+          <p>Noch keine Analysen gespeichert.<br>Trage oben dein erstes Spiel ein.</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = analyses.map(a => renderCard(a)).join('');
+  }
+
+  function renderCard(a) {
+    const rows = a.bookmakers.map((b, i) => {
+      const sign = b.diff > 0 ? '+' : '';
+      let diffClass, pillClass, pillLabel;
+      if (b.diff > 2)       { diffClass = 'diff-positive'; pillClass = 'good'; pillLabel = 'Value'; }
+      else if (b.diff < -2) { diffClass = 'diff-negative'; pillClass = 'bad';  pillLabel = 'Kein Value'; }
+      else                  { diffClass = 'diff-neutral';  pillClass = 'flat'; pillLabel = 'Neutral'; }
+
+      return `
+        <tr>
+          <td><span class="rank${i === 0 ? ' top' : ''}">${i + 1}</span></td>
+          <td><strong>${esc(b.name)}</strong></td>
+          <td>${b.odds.toFixed(2)}</td>
+          <td>${b.impliedProb.toFixed(1)} %</td>
+          <td class="${diffClass}">${sign}${b.diff.toFixed(1)} %</td>
+          <td><span class="value-pill ${pillClass}">${pillLabel}</span></td>
+        </tr>`;
+    }).join('');
+
+    return `
+      <div class="analysis-card">
+        <div class="analysis-card-header">
+          <div class="game-info">
+            <h3>${esc(a.game)}</h3>
+            <div class="market-tag">${esc(a.market)} &nbsp;·&nbsp; ${a.date}</div>
+          </div>
+          <div class="card-actions">
+            <div class="own-prob-block">
+              <div class="op-label">Eigene Schätzung</div>
+              <div class="op-value">${a.ownProb.toFixed(1)} %</div>
+            </div>
+            <button class="btn-danger" onclick="deleteAnalysis(${a.id})">Löschen</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Anbieter</th>
+                <th>Quote</th>
+                <th>Impl. Wahrsch.</th>
+                <th>Differenz</th>
+                <th>Bewertung</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
+  // ── API key helper ────────────────────────────────────────────────────────────
+  function getApiKey() {
+    const input = document.getElementById('apiKeyInput').value.trim();
+    const stored = localStorage.getItem(API_KEY_LS) || '';
+    const key = input || stored;
+    if (input) localStorage.setItem(API_KEY_LS, input);
+    return key;
+  }
+
+  // ── API: Events + eingebettete h2h-Quoten laden ──────────────────────────────
+  async function fetchAndShowEvents() {
+    const key = getApiKey();
+    if (!key) {
+      showToast('Bitte zuerst einen API-Schlüssel eingeben.', 'error');
+      document.getElementById('apiKeyInput').focus();
+      return;
+    }
+
+    const sport = document.getElementById('sportSelect').value;
+    const btn   = document.getElementById('btnFetchOdds');
+    btn.disabled = true;
+    btn.textContent = '⏳ Laden…';
+
+    try {
+      // The Odds API: ein einziger Call liefert Events + Quoten aller Buchmacher
+      const url = `${API_BASE}/sports/${encodeURIComponent(sport)}/odds` +
+                  `?apiKey=${encodeURIComponent(key)}&regions=eu,uk&markets=h2h&oddsFormat=decimal`;
+
+      const res = await fetch(url);
+
+      if (res.status === 401) throw new Error('Ungültiger API-Schlüssel.');
+      if (res.status === 404) throw new Error('Wettbewerb nicht gefunden – bitte anderen Eintrag wählen.');
+      if (res.status === 422) throw new Error('Unbekannter Wettbewerb – bitte anderen Eintrag wählen.');
+      if (res.status === 429) { handle429(res); throw new Error('Anfragelimit erreicht.'); }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `HTTP ${res.status}`);
+      }
+
+      currentEvents = await res.json();
+
+      if (!currentEvents.length) {
+        showToast('Keine Spiele gefunden – evtl. noch keine Quoten verfügbar.', 'error');
+        return;
+      }
+
+      showEventPicker(currentEvents);
+
+    } catch (e) {
+      showToast(`Fehler: ${e.message}`, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '↓ Quoten abrufen';
+    }
+  }
+
+  // ── Modal: Spielliste öffnen ──────────────────────────────────────────────────
+  // the-odds-api.com: Felder sind home_team, away_team, commence_time, sport_title
+  function showEventPicker(events) {
+    const leagueOrder  = [];
+    const leagueCounts = {};
+    events.forEach(ev => {
+      const n = ev.sport_title || 'Sonstige';
+      if (!leagueCounts[n]) { leagueCounts[n] = 0; leagueOrder.push(n); }
+      leagueCounts[n]++;
+    });
+    allLeagues = leagueOrder.map(n => ({ name: n, count: leagueCounts[n] }));
+    currentLeagueFilter = '';
+
+    document.getElementById('modalTitle').textContent = 'Spiel auswählen';
+    renderEventList();
+    openModal();
+  }
+
+  // ── Modal: Spielliste rendern ─────────────────────────────────────────────────
+  function renderEventList() {
+    const events = currentEvents;
+
+    const filtered = currentLeagueFilter
+      ? events.filter(ev => (ev.sport_title || 'Sonstige') === currentLeagueFilter)
+      : events;
+
+    // Mit the-odds-api.com wissen wir es genau: leeres bookmakers-Array = keine Quoten
+    const noOdds = filtered.filter(ev => !ev.bookmakers || ev.bookmakers.length === 0);
+    const avail  = filtered.filter(ev =>  ev.bookmakers && ev.bookmakers.length > 0);
+
+    document.getElementById('modalMeta').textContent =
+      `${avail.length} Spiel${avail.length !== 1 ? 'e' : ''}` +
+      (noOdds.length ? ` · ${noOdds.length} ohne Quoten` : '');
+
+    const filterHtml = allLeagues.length > 1 ? `
+      <div class="league-filter-row">
+        <select class="league-filter-select" onchange="setLeagueFilter(this.value)">
+          <option value="">Alle Wettbewerbe (${events.length})</option>
+          ${allLeagues.map(l =>
+            `<option value="${esc(l.name)}"${l.name === currentLeagueFilter ? ' selected' : ''}>
+              ${esc(l.name)} (${l.count})
+            </option>`
+          ).join('')}
+        </select>
+      </div>` : '';
+
+    const all = [...avail, ...noOdds];
+    const groups = {};
+    all.forEach(ev => {
+      const origIdx = events.indexOf(ev);
+      const key     = ev.sport_title || 'Sonstige';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push({ ev, idx: origIdx });
+    });
+
+    const listHtml = Object.entries(groups).map(([leagueName, items]) => {
+      const rows = items.map(({ ev, idx }) => {
+        const hasOdds = ev.bookmakers && ev.bookmakers.length > 0;
+        const d       = new Date(ev.commence_time);
+        const date    = d.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' });
+        const time    = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        const bkStr   = hasOdds ? `${ev.bookmakers.length} Anbieter` : '';
+        return `
+          <div class="event-item${hasOdds ? '' : ' event-item-no-odds'}"
+               ${hasOdds ? `onclick="showOutcomePicker(${idx})"` : ''}>
+            <div class="event-teams">
+              ${esc(ev.home_team)} <span class="vs">vs</span> ${esc(ev.away_team)}
+            </div>
+            <div class="event-meta">${date}, ${time}${bkStr ? ' · ' + bkStr : ''}</div>
+          </div>`;
+      }).join('');
+      return `
+        <div class="league-group">
+          <div class="league-group-header">
+            ${esc(leagueName)} <span class="league-count">${items.length}</span>
+          </div>
+          ${rows}
+        </div>`;
+    }).join('');
+
+    document.getElementById('modalBody').innerHTML =
+      filterHtml +
+      (listHtml || '<p style="padding:1.2rem;color:var(--muted)">Keine Spiele in diesem Wettbewerb.</p>');
+  }
+
+  function setLeagueFilter(value) {
+    currentLeagueFilter = value;
+    renderEventList();
+  }
+
+  function backToEventList() {
+    document.getElementById('modalTitle').textContent = 'Spiel auswählen';
+    renderEventList();
+  }
+
+  // ── Modal: Ergebnis wählen ────────────────────────────────────────────────────
+  // the-odds-api.com: Outcomes sind Teamnamen + "Draw" aus dem h2h-Markt
+  function showOutcomePicker(eventIndex) {
+    pendingEventIdx = eventIndex;
+    const ev = currentEvents[eventIndex];
+
+    // Spielfeld sofort befüllen (vor Outcome-Wahl)
+    document.getElementById('gameInput').value = `${ev.home_team} vs. ${ev.away_team}`;
+
+    // Outcomes aus dem ersten Buchmacher mit h2h-Markt extrahieren
+    const outcomeNames = [];
+    for (const bm of (ev.bookmakers || [])) {
+      const h2h = bm.markets.find(m => m.key === 'h2h');
+      if (h2h) {
+        h2h.outcomes.forEach(o => { if (!outcomeNames.includes(o.name)) outcomeNames.push(o.name); });
+        break;
+      }
+    }
+    currentOutcomes = outcomeNames.map(name => ({ displayLabel: name, outcomeName: name }));
+
+    document.getElementById('modalTitle').textContent = `${ev.home_team} vs. ${ev.away_team}`;
+    document.getElementById('modalMeta').textContent  = 'Ergebnis für Siegmarkt wählen';
+
+    const bkStr = `${(ev.bookmakers || []).length} Anbieter`;
+    document.getElementById('modalBody').innerHTML =
+      `<p class="modal-sub-label">Ergebnis wählen</p>` +
+      currentOutcomes.map((o, i) => `
+        <div class="event-item" onclick="applyOutcome(${i})">
+          <div class="event-teams">${esc(o.displayLabel)}</div>
+          <div class="event-meta">${bkStr}</div>
+        </div>`).join('') +
+      `<button class="btn-back" onclick="backToEventList()">← Zurück zur Spielliste</button>`;
+  }
+
+  // ── Apply: Quoten aus Event direkt übernehmen (kein zweiter API-Aufruf nötig) ─
+  function applyOutcome(outcomeIndex) {
+    const outcome = currentOutcomes[outcomeIndex];
+    const ev      = currentEvents[pendingEventIdx];
+
+    const rows = [];
+    for (const bm of (ev.bookmakers || [])) {
+      const h2h = bm.markets.find(m => m.key === 'h2h');
+      if (!h2h) continue;
+      const out = h2h.outcomes.find(o => o.name === outcome.outcomeName);
+      if (!out || !out.price || out.price <= 1) continue;
+      rows.push({ name: bm.title, odds: out.price });
+    }
+
+    if (rows.length === 0) {
+      document.getElementById('modalMeta').textContent = 'Keine Quoten verfügbar';
+      document.getElementById('modalBody').innerHTML = `
+        <div style="padding:1.1rem .9rem;color:var(--red);font-size:.86rem;line-height:1.5">
+          Für dieses Ergebnis wurden keine Quoten in der API-Antwort gefunden.
+        </div>
+        <button class="btn-back" onclick="showOutcomePicker(${pendingEventIdx})">← Anderes Ergebnis</button>
+        <button class="btn-back" onclick="backToEventList()" style="margin-left:.5rem">← Anderes Spiel</button>`;
+      return;
+    }
+
+    document.getElementById('gameInput').value   = `${ev.home_team} vs. ${ev.away_team}`;
+    document.getElementById('marketInput').value = outcome.displayLabel;
+
+    try {
+      document.getElementById('bookmakersContainer').innerHTML = '';
+      rows.forEach(({ name, odds }) => addBookmakerRow(name, odds));
+
+      closeModal();
+      showToast(`${rows.length} Buchmacher-Quoten für „${outcome.displayLabel}" geladen`);
+      document.getElementById('ownProbInput').focus();
+    } catch (e) {
+      showToast(`Fehler beim Laden der Quoten: ${e.message}`, 'error');
+      document.getElementById('modalMeta').textContent = 'Ergebnis für Siegmarkt wählen';
+    }
+  }
+
+  // ── Rate-Limit-Banner ─────────────────────────────────────────────────────────
+  function handle429(res) {
+    // Versuche, Wartezeit aus gängigen Rate-Limit-Headern zu lesen
+    let waitSeconds = null;
+
+    const retryAfter  = res.headers.get('Retry-After');
+    const rlReset     = res.headers.get('X-RateLimit-Reset')
+                     || res.headers.get('X-Rate-Limit-Reset')
+                     || res.headers.get('RateLimit-Reset');
+
+    if (retryAfter) {
+      const asInt = parseInt(retryAfter, 10);
+      if (!isNaN(asInt)) {
+        // Sekunden-Angabe (RFC 7231)
+        waitSeconds = asInt;
+      } else {
+        // HTTP-Datum-Angabe
+        const t = new Date(retryAfter).getTime();
+        if (!isNaN(t)) waitSeconds = Math.ceil((t - Date.now()) / 1000);
+      }
+    } else if (rlReset) {
+      const ts = parseInt(rlReset, 10);
+      if (!isNaN(ts)) {
+        // Unix-Timestamp: Sekunden oder Millisekunden
+        const resetMs = ts > 1e12 ? ts : ts * 1000;
+        waitSeconds = Math.ceil((resetMs - Date.now()) / 1000);
+      }
+    }
+
+    showRateLimitBanner(waitSeconds > 0 ? waitSeconds : null);
+  }
+
+  function showRateLimitBanner(waitSeconds) {
+    if (rateLimitTimer) { clearInterval(rateLimitTimer); rateLimitTimer = null; }
+    const banner = document.getElementById('rateLimitBanner');
+
+    if (waitSeconds) {
+      let remaining = waitSeconds;
+
+      function tick() {
+        if (remaining <= 0) {
+          clearInterval(rateLimitTimer);
+          rateLimitTimer = null;
+          banner.classList.remove('visible');
+          return;
+        }
+        const m = Math.floor(remaining / 60);
+        const s = remaining % 60;
+        const timeStr = m > 0
+          ? `${m} Min${s > 0 ? ' ' + s + ' Sek' : ''}`
+          : `${s} Sek`;
+        banner.innerHTML = `
+          <span class="rl-icon">⏱</span>
+          <div class="rl-body">
+            <div class="rl-title">Anfragelimit erreicht</div>
+            <div class="rl-countdown">${timeStr}</div>
+            <div class="rl-sub">Bitte warten, bis das Kontingent wieder freigegeben wird.</div>
+          </div>
+          <button class="rl-close" onclick="hideRateLimitBanner()" aria-label="Schließen">×</button>`;
+        banner.classList.add('visible');
+        remaining--;
+      }
+
+      tick();
+      rateLimitTimer = setInterval(tick, 1000);
+    } else {
+      // Keine Header-Informationen → generische Meldung
+      banner.innerHTML = `
+        <span class="rl-icon">⚠</span>
+        <div class="rl-body">
+          <div class="rl-title">Anfragelimit erreicht</div>
+          <div class="rl-sub">Das Kontingent setzt sich stündlich zurück — bitte später erneut versuchen.</div>
+        </div>
+        <button class="rl-close" onclick="hideRateLimitBanner()" aria-label="Schließen">×</button>`;
+      banner.classList.add('visible');
+    }
+  }
+
+  function hideRateLimitBanner() {
+    if (rateLimitTimer) { clearInterval(rateLimitTimer); rateLimitTimer = null; }
+    document.getElementById('rateLimitBanner').classList.remove('visible');
+  }
+
+  // ── Modal helpers ─────────────────────────────────────────────────────────────
+  function openModal()  { document.getElementById('modalOverlay').classList.add('open'); }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+  // ── Utilities ─────────────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.borderColor = type === 'error' ? 'rgba(248,113,113,.3)' : 'rgba(74,222,128,.3)';
+    t.style.color       = type === 'error' ? 'var(--red)' : 'var(--green)';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  init();
+</script>
+</body>
+</html>
