@@ -130,6 +130,11 @@
       50% { opacity: .5; transform: scale(.8); }
     }
 
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     .header-18 {
       background: var(--red);
       color: #fff;
@@ -1186,12 +1191,22 @@
     @media (max-width: 580px) {
       .form-row { grid-template-columns: 1fr; }
       .bookmaker-row { grid-template-columns: 1fr 1fr auto; }
-      header .subtitle { display: none; }
-      .analysis-card-header { flex-direction: column; align-items: flex-start; }
+      .analysis-card-header { flex-direction: column; align-items: flex-start; gap: .5rem; }
       .card-actions { width: 100%; justify-content: space-between; }
-      .api-bar { flex-direction: column; align-items: stretch; }
-      .api-bar-actions { flex-direction: row; flex-wrap: wrap; align-items: center; }
-      .btn-fetch-odds { flex: 1; }
+      .hero { padding: 2rem 1rem 1.75rem; }
+      .hero h2 { font-size: 2rem; }
+      .hero-stats { max-width: 100%; }
+      .hero-stat { padding: .75rem .25rem; }
+      .hero-stat-number { font-size: 1.4rem; }
+      .container { padding: 1.25rem .75rem 3rem; }
+      .bm-grid { grid-template-columns: 1fr; }
+      /* Mobile Tabelle: Impl.% und vs. Markt ausblenden */
+      thead th:nth-child(4),
+      tbody td:nth-child(4),
+      thead th:nth-child(5),
+      tbody td:nth-child(5) { display: none; }
+      .btn-fetch-odds { width: 100%; }
+      .odds-value { font-size: 1rem; }
     }
   </style>
 </head>
@@ -1573,7 +1588,13 @@
     const sport = document.getElementById('sportSelect').value;
     const btn   = document.getElementById('btnFetchOdds');
     btn.disabled = true;
-    btn.textContent = '⏳ Laden…';
+    btn.textContent = 'Quoten werden geladen…';
+    btn.style.opacity = '.7';
+    document.getElementById('comparisonResult').innerHTML = `
+      <div style="text-align:center;padding:3rem 1rem;color:var(--muted)">
+        <div style="font-size:2rem;margin-bottom:.75rem;animation:spin 1s linear infinite;display:inline-block">⚽</div>
+        <div style="font-size:.9rem">Live-Quoten werden abgerufen…</div>
+      </div>`;
 
     try {
       // The Odds API: ein einziger Call liefert Events + Quoten aller Buchmacher
@@ -1603,7 +1624,8 @@
       showToast(`Fehler: ${e.message}`, 'error');
     } finally {
       btn.disabled = false;
-      btn.textContent = '↓ Quoten abrufen';
+      btn.textContent = 'Spiele & Quoten laden →';
+      btn.style.opacity = '1';
     }
   }
 
