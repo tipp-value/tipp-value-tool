@@ -921,16 +921,19 @@
       display: inline-flex;
       align-items: center;
       gap: .4rem;
-      background: rgba(0,200,83,.1);
-      border: 1px solid rgba(0,200,83,.25);
-      border-radius: 4px;
-      padding: .3rem .9rem;
+      background: rgba(0,208,92,.12);
+      border: 1px solid rgba(0,208,92,.28);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 100px;
+      padding: .35rem 1rem;
       font-size: .7rem;
       font-weight: 700;
       letter-spacing: .12em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 1.25rem;
+      box-shadow: 0 0 24px rgba(0,208,92,.18);
     }
     .hero h2 {
       font-family: 'Barlow Condensed', sans-serif;
@@ -941,14 +944,21 @@
       margin-bottom: .75rem;
       letter-spacing: -.01em;
       text-transform: uppercase;
+      /* wirkt vom Shader beleuchtet statt aufgesetzt */
+      text-shadow: 0 0 40px rgba(0,208,92,.28), 0 2px 26px rgba(0,0,0,.55);
     }
     .hero h2 span { color: var(--accent); }
+    .hero h2 .accent {
+      color: var(--accent);
+      text-shadow: 0 0 28px rgba(0,208,92,.65), 0 0 60px rgba(0,208,92,.35);
+    }
     .hero p {
       font-size: .95rem;
-      color: var(--muted);
+      color: var(--muted-strong);
       max-width: 480px;
       margin: 0 auto 2rem;
       line-height: 1.6;
+      text-shadow: 0 1px 14px rgba(0,0,0,.55);
     }
     .hero-stats {
       display: flex;
@@ -957,16 +967,21 @@
       flex-wrap: wrap;
       margin: 0 auto 2rem;
       max-width: 520px;
-      border: 1px solid var(--border2);
+      border: 1px solid rgba(255,255,255,.10);
       border-radius: var(--radius);
       overflow: hidden;
+      /* Glas: Shader scheint durch, Box bindet sich ein */
+      background: rgba(9,14,23,.32);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      box-shadow: 0 10px 34px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.06);
     }
     .hero-stat {
       flex: 1;
       min-width: 90px;
       padding: 1rem .5rem;
-      border-right: 1px solid var(--border2);
-      background: var(--surface);
+      border-right: 1px solid rgba(255,255,255,.08);
+      background: transparent;
     }
     .hero-stat:last-child { border-right: none; }
     .hero-stat-number {
@@ -1265,43 +1280,22 @@
       overflow: hidden;
       pointer-events: none;
     }
-    .hero-grid {
+    /* WebGL-Shader-Hintergrund (Three.js) */
+    .hero-shader {
       position: absolute;
-      left: 50%;
-      bottom: -12%;
-      width: 240%;
-      height: 75%;
-      transform: translateX(-50%) rotateX(72deg);
-      transform-origin: bottom center;
-      background-image:
-        linear-gradient(rgba(0,200,83,.22) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,200,83,.22) 1px, transparent 1px);
-      background-size: 44px 44px;
-      -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 78%);
-      mask-image: linear-gradient(to top, #000 0%, transparent 78%);
-      animation: gridMove 2.6s linear infinite;
+      inset: 0;
+      z-index: 0;
     }
-    @keyframes gridMove {
-      from { background-position: 0 0; }
-      to   { background-position: 0 44px; }
-    }
-    .hero-orb {
+    .hero-shader canvas { display: block; width: 100% !important; height: 100% !important; }
+    /* Kontrast-Overlay, damit Titel & Text auf dem Shader lesbar bleiben */
+    .hero-bg::after {
+      content: '';
       position: absolute;
-      border-radius: 50%;
-      filter: blur(64px);
-      will-change: transform;
-    }
-    .hero-orb-1 {
-      width: 340px; height: 340px;
-      background: radial-gradient(circle, rgba(0,200,83,.55), transparent 70%);
-      top: -90px; left: 6%;
-      opacity: .45;
-    }
-    .hero-orb-2 {
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(31,111,235,.5), transparent 70%);
-      bottom: -80px; right: 4%;
-      opacity: .35;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(120% 90% at 50% 40%, transparent 0%, rgba(7,11,18,.30) 60%, rgba(7,11,18,.80) 100%),
+        linear-gradient(180deg, rgba(7,11,18,.35), rgba(7,11,18,.05) 45%, rgba(7,11,18,.60));
     }
     .hero h2 .word { display: inline-block; transform-origin: bottom center; }
     .hero h2 .accent { color: var(--accent); }
@@ -1316,13 +1310,12 @@
       will-change: transform;
     }
     @media (prefers-reduced-motion: reduce) {
-      .hero-grid, .hero-orb, .hero-scroll { animation: none !important; }
+      .hero-scroll { animation: none !important; }
     }
 
     @media (max-width: 580px) {
       .form-row { grid-template-columns: 1fr; }
       .bookmaker-row { grid-template-columns: 1fr 1fr auto; }
-      .hero-grid { animation-duration: 3.4s; }
       .analysis-card-header { flex-direction: column; align-items: flex-start; gap: .5rem; }
       .card-actions { width: 100%; justify-content: space-between; }
       .hero { padding: 2rem 1rem 1.75rem; }
@@ -1359,9 +1352,7 @@
 <!-- Hero -->
 <div class="hero">
   <div class="hero-bg" aria-hidden="true">
-    <div class="hero-grid"></div>
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-shader" id="heroShader"></div>
   </div>
   <div class="hero-eyebrow">⚽ FIFA WM 2026 · Echtzeit-Quotenvergleich</div>
   <h2><span class="word">Schlage</span> <span class="word">die</span><br><span class="word accent">Buchmacher.</span></h2>
@@ -1502,6 +1493,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/89/three.min.js"></script>
 <script>
   // ── Motion-Flag ──────────────────────────────────────────────────────────────
   const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1646,6 +1638,93 @@
       document.getElementById('cookieBanner').classList.add('hidden');
     }
     initMotion();
+    initHeroShader();
+  }
+
+  // ── Hero WebGL-Shader (Three.js, Vanilla-Port von shader-lines.tsx) ───────────
+  function initHeroShader() {
+    const container = document.getElementById('heroShader');
+    if (!container || !window.THREE) return;
+
+    const THREE = window.THREE;
+    const camera = new THREE.Camera();
+    camera.position.z = 1;
+
+    const scene = new THREE.Scene();
+    const geometry = new THREE.PlaneBufferGeometry(2, 2);
+
+    const uniforms = {
+      time:       { type: 'f',  value: 1.0 },
+      resolution: { type: 'v2', value: new THREE.Vector2() }
+    };
+
+    const vertexShader = `
+      void main() { gl_Position = vec4( position, 1.0 ); }
+    `;
+    const fragmentShader = `
+      precision highp float;
+      uniform vec2 resolution;
+      uniform float time;
+      float random (in float x) { return fract(sin(x)*1e4); }
+      void main(void) {
+        vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+        vec2 fMosaicScal = vec2(4.0, 2.0);
+        vec2 vScreenSize = vec2(256.0, 256.0);
+        uv.x = floor(uv.x * vScreenSize.x / fMosaicScal.x) / (vScreenSize.x / fMosaicScal.x);
+        uv.y = floor(uv.y * vScreenSize.y / fMosaicScal.y) / (vScreenSize.y / fMosaicScal.y);
+        float t = time*0.06 + random(uv.x)*0.4;
+        float lineWidth = 0.0008;
+        vec3 color = vec3(0.0);
+        for(int j = 0; j < 3; j++){
+          for(int i = 0; i < 5; i++){
+            color[j] += lineWidth*float(i*i) / abs(fract(t - 0.01*float(j)+float(i)*0.01)*1.0 - length(uv));
+          }
+        }
+        // Auf Marken-Grün abgestimmt (#00d05c): Linien leuchten grün/teal
+        vec3 green = vec3(
+          color.b * 0.10,
+          color.r * 0.35 + color.g * 0.80,
+          color.b * 0.42 + color.g * 0.18
+        );
+        gl_FragColor = vec4(green, 1.0);
+      }
+    `;
+
+    const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
+    scene.add(new THREE.Mesh(geometry, material));
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    function resize() {
+      const r = container.getBoundingClientRect();
+      renderer.setSize(r.width, r.height);
+      uniforms.resolution.value.x = renderer.domElement.width;
+      uniforms.resolution.value.y = renderer.domElement.height;
+    }
+    resize();
+    window.addEventListener('resize', resize, false);
+
+    if (REDUCED) { renderer.render(scene, camera); return; }
+
+    let raf, running = true;
+    function animate() {
+      if (!running) return;
+      raf = requestAnimationFrame(animate);
+      uniforms.time.value += 0.05;
+      renderer.render(scene, camera);
+    }
+    // Render pausieren, wenn der Hero aus dem Blick scrollt (spart GPU/Akku)
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && !running) { running = true; animate(); }
+          else if (!e.isIntersecting && running) { running = false; cancelAnimationFrame(raf); }
+        });
+      }, { threshold: 0 }).observe(document.querySelector('.hero'));
+    }
+    animate();
   }
 
   // ── GSAP Motion ───────────────────────────────────────────────────────────────
@@ -1653,10 +1732,6 @@
     if (REDUCED || !window.gsap) return;
     const { gsap } = window;
     if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
-
-    // Floating Orbs – Endlos-Drift
-    gsap.to('.hero-orb-1', { y: 30, x: 20, duration: 6, ease: 'sine.inOut', repeat: -1, yoyo: true });
-    gsap.to('.hero-orb-2', { y: -28, x: -18, duration: 7, ease: 'sine.inOut', repeat: -1, yoyo: true });
 
     // Hero-Entrance-Timeline
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
