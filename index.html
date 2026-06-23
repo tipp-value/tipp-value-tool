@@ -187,6 +187,20 @@
       border-radius: 3px;
       margin-left: .75rem;
     }
+    .lang-toggle {
+      margin-left: .75rem;
+      background: var(--surface3);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      padding: .25rem .55rem;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .lang-toggle:hover { background: var(--surface2); border-color: var(--accent-border); color: var(--accent); }
 
     .container {
       max-width: 980px;
@@ -1201,6 +1215,33 @@
     }
     .btn-bet:hover { background: #00e766; transform: translateY(-1px); }
 
+    /* ── Region-Hinweis ──────────────────────────────────────── */
+    .region-note {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      font-size: .62rem;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .region-note.warn { color: var(--gold); }
+    /* Kompakte Variante in der Quotentabelle */
+    td .region-note { margin-top: .25rem; }
+    /* Variante auf der Buchmacher-Karte */
+    .bm-region {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .3rem;
+      font-size: .68rem;
+      font-weight: 600;
+      margin-top: .6rem;
+      color: var(--muted);
+    }
+    .bm-region.warn { color: var(--gold); }
+
     /* ── Impressum Modal ─────────────────────────────────────── */
     .impressum-overlay {
       display: none;
@@ -1344,8 +1385,9 @@
   </a>
   <div class="header-live">
     <div class="header-live-dot"></div>
-    Live Quoten
+    <span data-i18n="liveOdds">Live Quoten</span>
   </div>
+  <button class="lang-toggle" id="langToggle" onclick="toggleLang()" title="Sprache / Language">EN</button>
   <span class="header-18">18+</span>
 </header>
 
@@ -1354,28 +1396,28 @@
   <div class="hero-bg" aria-hidden="true">
     <div class="hero-shader" id="heroShader"></div>
   </div>
-  <div class="hero-eyebrow">⚽ FIFA WM 2026 · Echtzeit-Quotenvergleich</div>
-  <h2><span class="word">Schlage</span> <span class="word">die</span><br><span class="word accent">Buchmacher.</span></h2>
-  <p>Vergleiche live Wettquoten aller großen Anbieter und erkenne sofort wo du einen echten Vorteil hast.</p>
+  <div class="hero-eyebrow" data-i18n="heroEyebrow">⚽ FIFA WM 2026 · Echtzeit-Quotenvergleich</div>
+  <h2 data-i18n-html="heroH2"><span class="word">Schlage</span> <span class="word">die</span><br><span class="word accent">Buchmacher.</span></h2>
+  <p data-i18n="heroP">Vergleiche live Wettquoten aller großen Anbieter und erkenne sofort wo du einen echten Vorteil hast.</p>
   <div class="hero-stats">
     <div class="hero-stat">
       <div class="hero-stat-number"><span class="num" data-to="41">41</span><span>+</span></div>
-      <div class="hero-stat-label">Buchmacher</div>
+      <div class="hero-stat-label" data-i18n="statBookmakers">Buchmacher</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-number"><span class="num" data-to="100">100</span><span>€</span></div>
-      <div class="hero-stat-label">Max. Bonus</div>
+      <div class="hero-stat-label" data-i18n="statMaxBonus">Max. Bonus</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-number">0<span>€</span></div>
-      <div class="hero-stat-label">Kosten</div>
+      <div class="hero-stat-label" data-i18n="statCost">Kosten</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-number">WM<span>26</span></div>
-      <div class="hero-stat-label">Fokus</div>
+      <div class="hero-stat-label" data-i18n="statFocus">Fokus</div>
     </div>
   </div>
-  <div class="hero-scroll">↓ Quoten laden & Value Bets finden</div>
+  <div class="hero-scroll" data-i18n="heroScroll">↓ Quoten laden & Value Bets finden</div>
 </div>
 
 <div class="container">
@@ -1388,9 +1430,9 @@
     <input type="hidden" id="apiKeyInput" />
     <div style="display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap">
       <div style="display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:180px">
-        <label for="sportSelect" style="font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Wettbewerb</label>
+        <label for="sportSelect" data-i18n="labelCompetition" style="font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Wettbewerb</label>
         <select id="sportSelect" class="sport-select">
-          <option value="soccer_fifa_world_cup">⚽ FIFA WM 2026</option>
+          <option value="soccer_fifa_world_cup" data-i18n="optWorldCup">⚽ FIFA WM 2026</option>
           <option value="soccer_uefa_champs_league">Champions League</option>
           <option value="soccer_uefa_europa_league">Europa League</option>
           <option value="soccer_germany_bundesliga">Bundesliga</option>
@@ -1401,7 +1443,7 @@
           <option value="soccer_italy_serie_a">Serie A</option>
         </select>
       </div>
-      <button class="btn-fetch-odds" id="btnFetchOdds" onclick="fetchAndShowEvents()">
+      <button class="btn-fetch-odds" id="btnFetchOdds" onclick="fetchAndShowEvents()" data-i18n="btnLoadOdds">
         Spiele & Quoten laden →
       </button>
     </div>
@@ -1412,9 +1454,9 @@
 
   <!-- Buchmacher Vergleich -->
   <div class="bm-section" style="margin-top:2.5rem">
-    <p class="section-label">Partnerlinks</p>
-    <h2 style="font-size:1.05rem;font-weight:700;margin-bottom:.25rem">Empfohlene Buchmacher</h2>
-    <p style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">Neukundenangebote · Bonuskonditionen können sich ändern · 18+</p>
+    <p class="section-label" data-i18n="sectionAffiliate">Partnerlinks</p>
+    <h2 data-i18n="sectionRecommended" style="font-size:1.05rem;font-weight:700;margin-bottom:.25rem">Empfohlene Buchmacher</h2>
+    <p data-i18n="sectionSub" style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">Neukundenangebote · Bonuskonditionen können sich ändern · 18+</p>
     <div class="bm-grid" id="bmGrid"></div>
   </div>
 
@@ -1424,7 +1466,7 @@
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
     <div class="modal-head">
-      <span class="modal-head-title" id="modalTitle">Spiele</span>
+      <span class="modal-head-title" id="modalTitle" data-i18n="modalGames">Spiele</span>
       <span class="modal-head-meta" id="modalMeta"></span>
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
@@ -1468,26 +1510,26 @@
 
 <!-- Cookie Banner -->
 <div class="cookie-banner" id="cookieBanner">
-  <p>Wir verwenden keine Tracking-Cookies. Affiliate-Links kennzeichnen wir transparent. Durch Nutzung der Seite stimmst du unserer <a href="mailto:datenschutz@tipp-value.de">Datenschutzerklärung</a> zu.</p>
-  <button class="cookie-accept" onclick="acceptCookies()">Verstanden</button>
+  <p data-i18n-html="cookieText">Wir verwenden keine Tracking-Cookies. Affiliate-Links kennzeichnen wir transparent. Durch Nutzung der Seite stimmst du unserer <a href="mailto:datenschutz@tipp-value.de">Datenschutzerklärung</a> zu.</p>
+  <button class="cookie-accept" onclick="acceptCookies()" data-i18n="cookieAccept">Verstanden</button>
 </div>
 
 <footer class="legal-footer">
-  <div>
+  <div data-i18n-html="footerGambling">
     <span class="age-badge">18+</span>
     Glücksspiel kann süchtig machen — spiele verantwortungsbewusst.
     Hilfe: <a href="https://www.bzga.de" target="_blank" rel="noopener">bzga.de</a> ·
     <a href="https://www.gamblingtherapy.org" target="_blank" rel="noopener">gamblingtherapy.org</a> ·
     <a href="https://www.check-dein-spiel.de" target="_blank" rel="noopener">check-dein-spiel.de</a>
   </div>
-  <div>
+  <div data-i18n="footerAffiliate">
     Diese Seite enthält Partnerlinks (gekennzeichnet mit „Jetzt anmelden"). Bei einer Kontoeröffnung über unsere Links erhalten wir eine Provision — für dich entstehen keine Mehrkosten. Bonusangebote gelten nur für Neukunden und können sich ändern.
   </div>
   <div>
     © 2026 Tipp-Value ·
-    <a href="#" onclick="openImpressum();return false;">Impressum</a> ·
-    <a href="mailto:jim.hornaek@gmail.com">Datenschutz &amp; Kontakt</a> ·
-    Alle Angaben ohne Gewähr.
+    <a href="#" onclick="openImpressum();return false;" data-i18n="footerImpressum">Impressum</a> ·
+    <a href="mailto:jim.hornaek@gmail.com" data-i18n="footerPrivacy">Datenschutz &amp; Kontakt</a> ·
+    <span data-i18n="footerNoGuarantee">Alle Angaben ohne Gewähr.</span>
   </div>
 </footer>
 
@@ -1498,6 +1540,186 @@
   // ── Motion-Flag ──────────────────────────────────────────────────────────────
   const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ── i18n: Deutsch / Englisch ──────────────────────────────────────────────────
+  // Statische Texte tragen data-i18n / data-i18n-html / data-i18n-attr im HTML.
+  // Dynamische Strings (JS) laufen über t(). Impressum bleibt bewusst deutsch.
+  const I18N = {
+    de: {
+      docTitle: 'WM 2026 Wettquoten Vergleich – Value Bets finden | Tipp-Value',
+      liveOdds: 'Live Quoten',
+      heroEyebrow: '⚽ FIFA WM 2026 · Echtzeit-Quotenvergleich',
+      heroH2: '<span class="word">Schlage</span> <span class="word">die</span><br><span class="word accent">Buchmacher.</span>',
+      heroP: 'Vergleiche live Wettquoten aller großen Anbieter und erkenne sofort wo du einen echten Vorteil hast.',
+      statBookmakers: 'Buchmacher',
+      statMaxBonus: 'Max. Bonus',
+      statCost: 'Kosten',
+      statFocus: 'Fokus',
+      heroScroll: '↓ Quoten laden & Value Bets finden',
+      labelCompetition: 'Wettbewerb',
+      optWorldCup: '⚽ FIFA WM 2026',
+      btnLoadOdds: 'Spiele & Quoten laden →',
+      sectionAffiliate: 'Partnerlinks',
+      sectionRecommended: 'Empfohlene Buchmacher',
+      sectionSub: 'Neukundenangebote · Bonuskonditionen können sich ändern · 18+',
+      modalGames: 'Spiele',
+      cookieText: 'Wir verwenden keine Tracking-Cookies. Affiliate-Links kennzeichnen wir transparent. Durch Nutzung der Seite stimmst du unserer <a href="mailto:datenschutz@tipp-value.de">Datenschutzerklärung</a> zu.',
+      cookieAccept: 'Verstanden',
+      footerGambling: '<span class="age-badge">18+</span> Glücksspiel kann süchtig machen — spiele verantwortungsbewusst. Hilfe: <a href="https://www.bzga.de" target="_blank" rel="noopener">bzga.de</a> · <a href="https://www.gamblingtherapy.org" target="_blank" rel="noopener">gamblingtherapy.org</a> · <a href="https://www.check-dein-spiel.de" target="_blank" rel="noopener">check-dein-spiel.de</a>',
+      footerAffiliate: 'Diese Seite enthält Partnerlinks (gekennzeichnet mit „Jetzt anmelden"). Bei einer Kontoeröffnung über unsere Links erhalten wir eine Provision — für dich entstehen keine Mehrkosten. Bonusangebote gelten nur für Neukunden und können sich ändern.',
+      footerImpressum: 'Impressum',
+      footerPrivacy: 'Datenschutz & Kontakt',
+      footerNoGuarantee: 'Alle Angaben ohne Gewähr.',
+      bmCta: 'Jetzt anmelden & Bonus sichern →',
+      bmDisclaimer: '*Nur für Neukunden · 18+ · AGB gelten',
+      loadingBtn: 'Quoten werden geladen…',
+      loadingOverlay: 'Live-Quoten werden abgerufen…',
+      errInvalidKey: 'Ungültiger API-Schlüssel.',
+      errNotFound: 'Wettbewerb nicht gefunden – bitte anderen Eintrag wählen.',
+      errUnknownComp: 'Unbekannter Wettbewerb – bitte anderen Eintrag wählen.',
+      errRateLimit: 'Anfragelimit erreicht.',
+      noGames: 'Keine Spiele gefunden – evtl. noch keine Quoten verfügbar.',
+      errorPrefix: 'Fehler: ',
+      selectMatch: 'Spiel auswählen',
+      thProvider: 'Anbieter', thOdds: 'Quote', thImpl: 'Impl. %', thVsMarket: 'vs. Markt', thRating: 'Bewertung',
+      pillValue: 'Value', pillLow: 'Niedrig', pillMarket: 'Markt',
+      betNow: 'Wetten →',
+      noGamesInComp: 'Keine Spiele in diesem Wettbewerb.',
+      chooseResult: 'Ergebnis für Siegmarkt wählen',
+      chooseResultShort: 'Ergebnis wählen',
+      backToList: '← Zurück zur Spielliste',
+      noOddsAvail: 'Keine Quoten verfügbar',
+      noOddsForResult: 'Für dieses Ergebnis wurden keine Quoten gefunden.',
+      otherResult: '← Anderes Ergebnis',
+      otherGame: '← Anderes Spiel',
+      rlTitle: 'Anfragelimit erreicht',
+      rlSub: 'Bitte warten, bis das Kontingent wieder freigegeben wird.',
+      rlSubGeneric: 'Das Kontingent setzt sich stündlich zurück — bitte später erneut versuchen.',
+      close: 'Schließen',
+      providers: n => `${n} Anbieter`,
+      bookmakersBest: n => `${n} Buchmacher · Beste Quote zuerst`,
+      gamesCount: n => `${n} Spiel${n !== 1 ? 'e' : ''}`,
+      withoutOdds: n => ` · ${n} ohne Quoten`,
+      allComps: n => `Alle Wettbewerbe (${n})`,
+      oddsLoaded: (n, label) => `${n} Quoten für „${label}" geladen`,
+      waitTime: (m, s) => m > 0 ? `${m} Min${s > 0 ? ' ' + s + ' Sek' : ''}` : `${s} Sek`,
+      regionDe: 'Deutsche Lizenz',
+      regionInt: 'International verfügbar',
+      regionUk: 'Nur in UK / Irland verfügbar',
+      regionRestricted: 'In Deutschland meist gesperrt',
+      regionUnknown: 'Verfügbarkeit je nach Region',
+    },
+    en: {
+      docTitle: 'World Cup 2026 Odds Comparison – Find Value Bets | Tipp-Value',
+      liveOdds: 'Live Odds',
+      heroEyebrow: '⚽ FIFA World Cup 2026 · Real-time odds comparison',
+      heroH2: '<span class="word">Beat</span> <span class="word">the</span><br><span class="word accent">bookmakers.</span>',
+      heroP: 'Compare live odds from all major bookmakers and instantly spot where you have a real edge.',
+      statBookmakers: 'Bookmakers',
+      statMaxBonus: 'Max. bonus',
+      statCost: 'Cost',
+      statFocus: 'Focus',
+      heroScroll: '↓ Load odds & find value bets',
+      labelCompetition: 'Competition',
+      optWorldCup: '⚽ FIFA World Cup 2026',
+      btnLoadOdds: 'Load games & odds →',
+      sectionAffiliate: 'Affiliate links',
+      sectionRecommended: 'Recommended bookmakers',
+      sectionSub: 'New-customer offers · bonus terms may change · 18+',
+      modalGames: 'Games',
+      cookieText: 'We use no tracking cookies. Affiliate links are clearly labelled. By using this site you agree to our <a href="mailto:datenschutz@tipp-value.de">privacy policy</a>.',
+      cookieAccept: 'Got it',
+      footerGambling: '<span class="age-badge">18+</span> Gambling can be addictive — please play responsibly. Help: <a href="https://www.bzga.de" target="_blank" rel="noopener">bzga.de</a> · <a href="https://www.gamblingtherapy.org" target="_blank" rel="noopener">gamblingtherapy.org</a> · <a href="https://www.check-dein-spiel.de" target="_blank" rel="noopener">check-dein-spiel.de</a>',
+      footerAffiliate: 'This site contains affiliate links (marked with “Sign up”). If you open an account via our links we receive a commission — at no extra cost to you. Bonus offers apply to new customers only and may change.',
+      footerImpressum: 'Impressum (DE)',
+      footerPrivacy: 'Privacy & contact',
+      footerNoGuarantee: 'All information without guarantee.',
+      bmCta: 'Sign up & claim bonus →',
+      bmDisclaimer: '*New customers only · 18+ · T&Cs apply',
+      loadingBtn: 'Loading odds…',
+      loadingOverlay: 'Fetching live odds…',
+      errInvalidKey: 'Invalid API key.',
+      errNotFound: 'Competition not found – please choose another entry.',
+      errUnknownComp: 'Unknown competition – please choose another entry.',
+      errRateLimit: 'Request limit reached.',
+      noGames: 'No games found – odds may not be available yet.',
+      errorPrefix: 'Error: ',
+      selectMatch: 'Select a match',
+      thProvider: 'Provider', thOdds: 'Odds', thImpl: 'Impl. %', thVsMarket: 'vs. market', thRating: 'Rating',
+      pillValue: 'Value', pillLow: 'Low', pillMarket: 'Market',
+      betNow: 'Bet →',
+      noGamesInComp: 'No games in this competition.',
+      chooseResult: 'Choose a result for the match-winner market',
+      chooseResultShort: 'Choose a result',
+      backToList: '← Back to match list',
+      noOddsAvail: 'No odds available',
+      noOddsForResult: 'No odds found for this result.',
+      otherResult: '← Other result',
+      otherGame: '← Other match',
+      rlTitle: 'Request limit reached',
+      rlSub: 'Please wait until the quota is released again.',
+      rlSubGeneric: 'The quota resets hourly — please try again later.',
+      close: 'Close',
+      providers: n => `${n} provider${n !== 1 ? 's' : ''}`,
+      bookmakersBest: n => `${n} bookmakers · best odds first`,
+      gamesCount: n => `${n} game${n !== 1 ? 's' : ''}`,
+      withoutOdds: n => ` · ${n} without odds`,
+      allComps: n => `All competitions (${n})`,
+      oddsLoaded: (n, label) => `Loaded ${n} odds for “${label}”`,
+      waitTime: (m, s) => m > 0 ? `${m} min${s > 0 ? ' ' + s + ' sec' : ''}` : `${s} sec`,
+      regionDe: 'German licence',
+      regionInt: 'Available internationally',
+      regionUk: 'Only available in UK / Ireland',
+      regionRestricted: 'Usually blocked in Germany',
+      regionUnknown: 'Availability varies by region',
+    },
+  };
+
+  function detectLang() {
+    const saved = localStorage.getItem('lang');
+    if (saved === 'de' || saved === 'en') return saved;
+    return (navigator.language || 'de').toLowerCase().startsWith('en') ? 'en' : 'de';
+  }
+  let LANG = detectLang();
+
+  // Übersetzungs-Lookup; Funktionswerte werden mit args aufgerufen.
+  function t(key, ...args) {
+    const v = (I18N[LANG] && I18N[LANG][key]) ?? (I18N.de[key] ?? key);
+    return typeof v === 'function' ? v(...args) : v;
+  }
+  // Gebietsschema für Datum/Uhrzeit.
+  function locale() { return LANG === 'en' ? 'en-GB' : 'de-DE'; }
+
+  // Wendet die aktuelle Sprache auf alle statischen Elemente an.
+  function applyI18n() {
+    document.documentElement.lang = LANG;
+    document.title = t('docTitle');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      el.textContent = t(el.getAttribute('data-i18n'));
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      el.innerHTML = t(el.getAttribute('data-i18n-html'));
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.getAttribute('data-i18n-attr').split(';').forEach(pair => {
+        const [attr, key] = pair.split(':');
+        if (attr && key) el.setAttribute(attr.trim(), t(key.trim()));
+      });
+    });
+    const tgl = document.getElementById('langToggle');
+    if (tgl) tgl.textContent = LANG === 'de' ? 'EN' : 'DE';
+    renderBookmakers();
+    // Tilt für die neu gerenderten Karten erneut binden (alte Listener sterben mit dem DOM).
+    const grid = document.getElementById('bmGrid');
+    if (grid) attachTilt(grid);
+  }
+
+  function setLang(lang) {
+    LANG = (lang === 'en') ? 'en' : 'de';
+    localStorage.setItem('lang', LANG);
+    applyI18n();
+  }
+  function toggleLang() { setLang(LANG === 'de' ? 'en' : 'de'); }
+
   // ── Buchmacher-Daten (Platzhalter-URLs nach Affiliate-Anmeldung ersetzen) ────
   const BOOKMAKERS = [
     {
@@ -1506,9 +1728,13 @@
       color: '#009900',
       key: 'tipico',
       affiliateUrl: '#affiliate-tipico',
+      siteUrl: 'https://www.tipico.de',
       bonus: '100% bis 100€',
       bonusLabel: 'Einzahlungsbonus für Neukunden',
       features: ['Nr. 1 in Deutschland', 'Live-Wetten & Livestream', 'Starke WM-Quoten'],
+      bonusEn: '100% up to €100',
+      bonusLabelEn: 'Deposit bonus for new customers',
+      featuresEn: ['No. 1 in Germany', 'Live betting & livestream', 'Strong World Cup odds'],
       rating: 5,
       featured: true,
     },
@@ -1518,9 +1744,13 @@
       color: '#e4002b',
       key: 'betano',
       affiliateUrl: '#affiliate-betano',
+      siteUrl: 'https://www.betano.de',
       bonus: '100% bis 100€',
       bonusLabel: 'Neukundenbonus auf Erstwette',
       features: ['Riesiges Marktangebot', 'Cash Out Funktion', 'Blitzschnelle Auszahlung'],
+      bonusEn: '100% up to €100',
+      bonusLabelEn: 'New-customer bonus on first bet',
+      featuresEn: ['Huge market range', 'Cash-out feature', 'Lightning-fast payouts'],
       rating: 5,
       featured: false,
     },
@@ -1530,9 +1760,13 @@
       color: '#027b5b',
       key: 'bet365',
       affiliateUrl: '#affiliate-bet365',
+      siteUrl: 'https://www.bet365.com',
       bonus: 'bis 100€ Wettguthaben',
       bonusLabel: 'Für Neukunden',
       features: ['Weltgrößter Buchmacher', 'WM 2026 Livestream', 'In-Play Wetten'],
+      bonusEn: 'up to €100 in bet credits',
+      bonusLabelEn: 'For new customers',
+      featuresEn: ["World's largest bookmaker", 'World Cup 2026 livestream', 'In-play betting'],
       rating: 5,
       featured: false,
     },
@@ -1542,9 +1776,13 @@
       color: '#e85d04',
       key: 'bwin',
       affiliateUrl: '#affiliate-bwin',
+      siteUrl: 'https://www.bwin.de',
       bonus: '100% bis 100€',
       bonusLabel: 'Einzahlungsbonus für Neukunden',
       features: ['Traditionsreicher Anbieter', 'Viele Zahlungsmethoden', 'Casino & Sport'],
+      bonusEn: '100% up to €100',
+      bonusLabelEn: 'Deposit bonus for new customers',
+      featuresEn: ['Long-established provider', 'Many payment methods', 'Casino & sports'],
       rating: 4,
       featured: false,
     },
@@ -1554,9 +1792,13 @@
       color: '#cc0000',
       key: 'pinnacle',
       affiliateUrl: '#affiliate-pinnacle',
+      siteUrl: 'https://www.pinnacle.com',
       bonus: 'Beste Quoten — kein Limit',
       bonusLabel: 'Sharp Bookmaker für Value Better',
       features: ['Höchste Quoten am Markt', 'Keine Kontolimits', 'Ideal für Value Betting'],
+      bonusEn: 'Best odds — no limits',
+      bonusLabelEn: 'Sharp bookmaker for value bettors',
+      featuresEn: ['Highest odds on the market', 'No account limits', 'Ideal for value betting'],
       rating: 5,
       featured: false,
     },
@@ -1566,26 +1808,132 @@
       color: '#147b45',
       key: 'unibet',
       affiliateUrl: '#affiliate-unibet',
+      siteUrl: 'https://www.unibet.com',
       bonus: '100% bis 100€',
       bonusLabel: 'Für Neukunden',
       features: ['Faire Quoten', '24/7 Live Chat', 'Starke Mobile App'],
+      bonusEn: '100% up to €100',
+      bonusLabelEn: 'For new customers',
+      featuresEn: ['Fair odds', '24/7 live chat', 'Strong mobile app'],
       rating: 4,
       featured: false,
     },
   ];
 
-  function getAffiliateLink(bookmakerName) {
-    const key = bookmakerName.toLowerCase();
-    const bm = BOOKMAKERS.find(b => key.includes(b.key));
-    return bm ? bm.affiliateUrl : null;
+  // Liefert den Ziel-Link eines Buchmachers. Solange noch kein echter
+  // Affiliate-Link hinterlegt ist (Platzhalter beginnt mit '#'), verlinken wir
+  // direkt auf die offizielle Website. rel='sponsored' nur bei echtem Partnerlink.
+  function resolveBmLink(bm) {
+    if (!bm) return null;
+    const hasAffiliate = bm.affiliateUrl && !bm.affiliateUrl.startsWith('#');
+    const url = hasAffiliate ? bm.affiliateUrl : bm.siteUrl;
+    if (!url) return null;
+    return { url, sponsored: hasAffiliate };
+  }
+
+  // Normalisiert Buchmacher-Namen (nur a-z0-9), damit "William Hill" → "williamhill".
+  const normBm = s => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  // Offizielle Websites weiterer, häufig von der Odds API gelieferter Buchmacher
+  // (ohne eigene Marketing-Karte). Keys sind normalisiert.
+  const BM_SITES = {
+    williamhill:  'https://www.williamhill.com',
+    betway:       'https://www.betway.de',
+    betfair:      'https://www.betfair.com',
+    '888sport':   'https://www.888sport.de',
+    '1xbet':      'https://1xbet.com',
+    marathonbet:  'https://www.marathonbet.com',
+    nordicbet:    'https://www.nordicbet.com',
+    betsson:      'https://www.betsson.com',
+    betvictor:    'https://www.betvictor.com',
+    leovegas:     'https://www.leovegas.de',
+    betclic:      'https://www.betclic.com',
+    coolbet:      'https://www.coolbet.com',
+    matchbook:    'https://www.matchbook.com',
+    smarkets:     'https://smarkets.com',
+    winamax:      'https://www.winamax.de',
+    livescorebet: 'https://www.livescorebet.com',
+    parimatch:    'https://www.parimatch.com',
+    betsafe:      'https://www.betsafe.com',
+    mrgreen:      'https://www.mrgreen.de',
+    ladbrokes:    'https://www.ladbrokes.com',
+    coral:        'https://www.coral.co.uk',
+    skybet:       'https://www.skybet.com',
+    paddypower:   'https://www.paddypower.com',
+    betfred:      'https://www.betfred.com',
+    casumo:       'https://www.casumo.de',
+    suprabets:    'https://www.suprabets.com',
+    everygame:    'https://www.everygame.eu',
+  };
+
+  // Region-Verfügbarkeit je Buchmacher (normalisierte Keys, geprüft per Live-Check).
+  // de = deutsche Lizenz · int = international · uk = nur UK/Irland · restricted = in DE gesperrt
+  const BM_REGIONS = {
+    tipico: 'de', betano: 'de', bwin: 'de', winamax: 'de', bet365: 'de',
+    betway: 'de', '888sport': 'de', leovegas: 'de', mrgreen: 'de', casumo: 'de',
+    pinnacle: 'int', '1xbet': 'int', everygame: 'int', betfair: 'int',
+    betvictor: 'int', betclic: 'int', matchbook: 'int', smarkets: 'int',
+    coolbet: 'int', parimatch: 'int', unibet: 'int',
+    williamhill: 'uk', coral: 'uk', ladbrokes: 'uk', skybet: 'uk',
+    paddypower: 'uk', betfred: 'uk', livescorebet: 'uk',
+    nordicbet: 'restricted', betsson: 'restricted', betsafe: 'restricted',
+    marathonbet: 'restricted', suprabets: 'restricted',
+  };
+
+  // Icon + i18n-Key je Region-Kategorie; Text wird sprachabhängig per t() geholt.
+  const REGION_INFO = {
+    de:         { icon: '🇩🇪', key: 'regionDe',        warn: false },
+    int:        { icon: '🌍', key: 'regionInt',        warn: false },
+    uk:         { icon: '🇬🇧', key: 'regionUk',         warn: true  },
+    restricted: { icon: '⚠️', key: 'regionRestricted', warn: true  },
+    unknown:    { icon: '🌐', key: 'regionUnknown',     warn: true  },
+  };
+
+  // Liefert den Region-Hinweis zu einem Buchmacher-Titel (sprachabhängig).
+  function regionInfo(title) {
+    const n = normBm(title);
+    let info = REGION_INFO.unknown;
+    for (const k in BM_REGIONS) {
+      if (n.includes(k)) { info = REGION_INFO[BM_REGIONS[k]]; break; }
+    }
+    return { icon: info.icon, text: t(info.key), warn: info.warn };
+  }
+
+  // Findet die zum Buchmacher-Titel passende kuratierte Karte (normalisiert).
+  function findBookmaker(title) {
+    const n = normBm(title);
+    return BOOKMAKERS.find(b => n.includes(b.key)) || null;
+  }
+
+  // Liefert den Ziel-Link für einen beliebigen Buchmacher-Titel aus der Odds API:
+  // 1) kuratierte Karte (mit evtl. echtem Affiliate-Link),
+  // 2) erweiterte Liste offizieller Websites,
+  // 3) generischer Fallback www.{name}.com — passt meistens.
+  function getAffiliateLink(title) {
+    const curated = findBookmaker(title);
+    if (curated) return resolveBmLink(curated);
+
+    const n = normBm(title);
+    for (const k in BM_SITES) {
+      if (n.includes(k)) return { url: BM_SITES[k], sponsored: false };
+    }
+    if (n) return { url: `https://www.${n}.com`, sponsored: false };
+    return null;
   }
 
   function renderBookmakers() {
     const grid = document.getElementById('bmGrid');
     if (!grid) return;
-    grid.innerHTML = BOOKMAKERS.map(bm => `
+    grid.innerHTML = BOOKMAKERS.map(bm => {
+      const link = resolveBmLink(bm);
+      const ri   = regionInfo(bm.name);
+      const bonus      = (LANG === 'en' && bm.bonusEn)      ? bm.bonusEn      : bm.bonus;
+      const bonusLabel = (LANG === 'en' && bm.bonusLabelEn) ? bm.bonusLabelEn : bm.bonusLabel;
+      const features   = (LANG === 'en' && bm.featuresEn)   ? bm.featuresEn   : bm.features;
+      const topBadge   = LANG === 'en' ? '⭐ Top pick' : '⭐ Top-Empfehlung';
+      return `
       <div class="bm-card tilt${bm.featured ? ' featured' : ''}" style="--bm-color:${bm.color}">
-        ${bm.featured ? '<div class="bm-top-badge">⭐ Top-Empfehlung</div>' : ''}
+        ${bm.featured ? `<div class="bm-top-badge">${topBadge}</div>` : ''}
         <div class="bm-header">
           <div class="bm-icon" style="background:${bm.color}">${bm.initials}</div>
           <div>
@@ -1594,18 +1942,20 @@
           </div>
         </div>
         <div class="bm-bonus">
-          <div class="bm-bonus-amount">${bm.bonus}</div>
-          <div class="bm-bonus-label">${bm.bonusLabel}</div>
+          <div class="bm-bonus-amount">${bonus}</div>
+          <div class="bm-bonus-label">${bonusLabel}</div>
         </div>
         <ul class="bm-features">
-          ${bm.features.map(f => `<li>${f}</li>`).join('')}
+          ${features.map(f => `<li>${f}</li>`).join('')}
         </ul>
-        <a href="${bm.affiliateUrl}" target="_blank" rel="noopener sponsored" class="bm-cta">
-          Jetzt anmelden &amp; Bonus sichern →
+        <a href="${link.url}" target="_blank" rel="noopener${link.sponsored ? ' sponsored' : ''}" class="bm-cta">
+          ${t('bmCta')}
         </a>
-        <div class="bm-disclaimer">*Nur für Neukunden · 18+ · AGB gelten</div>
+        <div class="bm-region${ri.warn ? ' warn' : ''}">${ri.icon} ${ri.text}</div>
+        <div class="bm-disclaimer">${t('bmDisclaimer')}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
   }
 
   function acceptCookies() {
@@ -1632,7 +1982,7 @@
 
   // ── Init ─────────────────────────────────────────────────────────────────────
   function init() {
-    renderBookmakers();
+    applyI18n();
     attachTilt();
     if (localStorage.getItem('cookie_ok')) {
       document.getElementById('cookieBanner').classList.add('hidden');
@@ -1763,9 +2113,9 @@
   }
 
   // ── 3D-Tilt auf Karten (nur Maus, nicht Touch) ───────────────────────────────
-  function attachTilt() {
+  function attachTilt(root = document) {
     if (REDUCED || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches)) return;
-    document.querySelectorAll('.tilt').forEach(card => {
+    root.querySelectorAll('.tilt').forEach(card => {
       card.addEventListener('pointermove', e => {
         const r  = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - .5;
@@ -1800,15 +2150,16 @@
       const vsMarket = avgImpl - impl;
       const isBest   = i === 0;
       let pillClass, pillLabel;
-      if (vsMarket > 1.5)       { pillClass = 'good'; pillLabel = 'Value'; }
-      else if (vsMarket < -1.5) { pillClass = 'bad';  pillLabel = 'Niedrig'; }
-      else                      { pillClass = 'flat'; pillLabel = 'Markt'; }
+      if (vsMarket > 1.5)       { pillClass = 'good'; pillLabel = t('pillValue'); }
+      else if (vsMarket < -1.5) { pillClass = 'bad';  pillLabel = t('pillLow'); }
+      else                      { pillClass = 'flat'; pillLabel = t('pillMarket'); }
 
-      const bm            = BOOKMAKERS.find(b => r.name.toLowerCase().includes(b.key));
+      const bm            = findBookmaker(r.name);
       const dotColor      = bm ? bm.color : '#555';
-      const affiliateLink = getAffiliateLink(r.name);
-      const betBtn        = affiliateLink
-        ? `<a href="${affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-bet">Wetten →</a>`
+      const link          = getAffiliateLink(r.name);
+      const ri            = regionInfo(r.name);
+      const betBtn        = link
+        ? `<a href="${link.url}" target="_blank" rel="noopener${link.sponsored ? ' sponsored' : ''}" class="btn-bet" title="${esc(ri.text)}">${t('betNow')}</a>`
         : '';
 
       return `
@@ -1819,6 +2170,7 @@
               <div class="bm-dot" style="background:${dotColor}"></div>
               <strong>${esc(r.name)}</strong>
             </div>
+            <span class="region-note${ri.warn ? ' warn' : ''}">${ri.icon} ${ri.text}</span>
           </td>
           <td><span class="odds-value" style="color:${isBest ? 'var(--accent)' : 'var(--text)'}">${r.odds.toFixed(2)}</span></td>
           <td style="color:var(--muted)">${impl.toFixed(1)}%</td>
@@ -1834,7 +2186,7 @@
             <h3>${esc(matchName)}</h3>
             <div class="market-tag">
               <span class="outcome-badge">${esc(outcomeName)}</span>
-              ${rows.length} Buchmacher · Beste Quote zuerst
+              ${t('bookmakersBest', rows.length)}
             </div>
           </div>
           <button class="btn-danger" onclick="document.getElementById('comparisonResult').innerHTML=''">✕</button>
@@ -1843,7 +2195,7 @@
           <table>
             <thead>
               <tr>
-                <th>#</th><th>Anbieter</th><th>Quote</th><th>Impl. %</th><th>vs. Markt</th><th>Bewertung</th>
+                <th>#</th><th>${t('thProvider')}</th><th>${t('thOdds')}</th><th>${t('thImpl')}</th><th>${t('thVsMarket')}</th><th>${t('thRating')}</th>
               </tr>
             </thead>
             <tbody>${tableRows}</tbody>
@@ -1870,12 +2222,12 @@
     const sport = document.getElementById('sportSelect').value;
     const btn   = document.getElementById('btnFetchOdds');
     btn.disabled = true;
-    btn.textContent = 'Quoten werden geladen…';
+    btn.textContent = t('loadingBtn');
     btn.style.opacity = '.7';
     document.getElementById('comparisonResult').innerHTML = `
       <div style="text-align:center;padding:3rem 1rem;color:var(--muted)">
         <div style="font-size:2rem;margin-bottom:.75rem;animation:spin 1s linear infinite;display:inline-block">⚽</div>
-        <div style="font-size:.9rem">Live-Quoten werden abgerufen…</div>
+        <div style="font-size:.9rem">${t('loadingOverlay')}</div>
       </div>`;
 
     try {
@@ -1884,10 +2236,10 @@
 
       const res = await fetch(url);
 
-      if (res.status === 401) throw new Error('Ungültiger API-Schlüssel.');
-      if (res.status === 404) throw new Error('Wettbewerb nicht gefunden – bitte anderen Eintrag wählen.');
-      if (res.status === 422) throw new Error('Unbekannter Wettbewerb – bitte anderen Eintrag wählen.');
-      if (res.status === 429) { handle429(res); throw new Error('Anfragelimit erreicht.'); }
+      if (res.status === 401) throw new Error(t('errInvalidKey'));
+      if (res.status === 404) throw new Error(t('errNotFound'));
+      if (res.status === 422) throw new Error(t('errUnknownComp'));
+      if (res.status === 429) { handle429(res); throw new Error(t('errRateLimit')); }
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || `HTTP ${res.status}`);
@@ -1896,17 +2248,17 @@
       currentEvents = await res.json();
 
       if (!currentEvents.length) {
-        showToast('Keine Spiele gefunden – evtl. noch keine Quoten verfügbar.', 'error');
+        showToast(t('noGames'), 'error');
         return;
       }
 
       showEventPicker(currentEvents);
 
     } catch (e) {
-      showToast(`Fehler: ${e.message}`, 'error');
+      showToast(`${t('errorPrefix')}${e.message}`, 'error');
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Spiele & Quoten laden →';
+      btn.textContent = t('btnLoadOdds');
       btn.style.opacity = '1';
     }
   }
@@ -1924,7 +2276,7 @@
     allLeagues = leagueOrder.map(n => ({ name: n, count: leagueCounts[n] }));
     currentLeagueFilter = '';
 
-    document.getElementById('modalTitle').textContent = 'Spiel auswählen';
+    document.getElementById('modalTitle').textContent = t('selectMatch');
     renderEventList();
     openModal();
   }
@@ -1942,13 +2294,13 @@
     const avail  = filtered.filter(ev =>  ev.bookmakers && ev.bookmakers.length > 0);
 
     document.getElementById('modalMeta').textContent =
-      `${avail.length} Spiel${avail.length !== 1 ? 'e' : ''}` +
-      (noOdds.length ? ` · ${noOdds.length} ohne Quoten` : '');
+      t('gamesCount', avail.length) +
+      (noOdds.length ? t('withoutOdds', noOdds.length) : '');
 
     const filterHtml = allLeagues.length > 1 ? `
       <div class="league-filter-row">
         <select class="league-filter-select" onchange="setLeagueFilter(this.value)">
-          <option value="">Alle Wettbewerbe (${events.length})</option>
+          <option value="">${t('allComps', events.length)}</option>
           ${allLeagues.map(l =>
             `<option value="${esc(l.name)}"${l.name === currentLeagueFilter ? ' selected' : ''}>
               ${esc(l.name)} (${l.count})
@@ -1970,9 +2322,9 @@
       const rows = items.map(({ ev, idx }) => {
         const hasOdds = ev.bookmakers && ev.bookmakers.length > 0;
         const d       = new Date(ev.commence_time);
-        const date    = d.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' });
-        const time    = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-        const bkStr   = hasOdds ? `${ev.bookmakers.length} Anbieter` : '';
+        const date    = d.toLocaleDateString(locale(), { weekday: 'short', day: '2-digit', month: '2-digit' });
+        const time    = d.toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit' });
+        const bkStr   = hasOdds ? t('providers', ev.bookmakers.length) : '';
         return `
           <div class="event-item${hasOdds ? '' : ' event-item-no-odds'}"
                ${hasOdds ? `onclick="showOutcomePicker(${idx})"` : ''}>
@@ -1993,7 +2345,7 @@
 
     document.getElementById('modalBody').innerHTML =
       filterHtml +
-      (listHtml || '<p style="padding:1.2rem;color:var(--muted)">Keine Spiele in diesem Wettbewerb.</p>');
+      (listHtml || `<p style="padding:1.2rem;color:var(--muted)">${t('noGamesInComp')}</p>`);
   }
 
   function setLeagueFilter(value) {
@@ -2002,7 +2354,7 @@
   }
 
   function backToEventList() {
-    document.getElementById('modalTitle').textContent = 'Spiel auswählen';
+    document.getElementById('modalTitle').textContent = t('selectMatch');
     renderEventList();
   }
 
@@ -2024,17 +2376,17 @@
     currentOutcomes = outcomeNames.map(name => ({ displayLabel: name, outcomeName: name }));
 
     document.getElementById('modalTitle').textContent = `${ev.home_team} vs. ${ev.away_team}`;
-    document.getElementById('modalMeta').textContent  = 'Ergebnis für Siegmarkt wählen';
+    document.getElementById('modalMeta').textContent  = t('chooseResult');
 
-    const bkStr = `${(ev.bookmakers || []).length} Anbieter`;
+    const bkStr = t('providers', (ev.bookmakers || []).length);
     document.getElementById('modalBody').innerHTML =
-      `<p class="modal-sub-label">Ergebnis wählen</p>` +
+      `<p class="modal-sub-label">${t('chooseResultShort')}</p>` +
       currentOutcomes.map((o, i) => `
         <div class="event-item" onclick="applyOutcome(${i})">
           <div class="event-teams">${esc(o.displayLabel)}</div>
           <div class="event-meta">${bkStr}</div>
         </div>`).join('') +
-      `<button class="btn-back" onclick="backToEventList()">← Zurück zur Spielliste</button>`;
+      `<button class="btn-back" onclick="backToEventList()">${t('backToList')}</button>`;
   }
 
   // ── Apply: Quoten direkt als Vergleichstabelle anzeigen ──────────────────────
@@ -2053,19 +2405,19 @@
     }
 
     if (rows.length === 0) {
-      document.getElementById('modalMeta').textContent = 'Keine Quoten verfügbar';
+      document.getElementById('modalMeta').textContent = t('noOddsAvail');
       document.getElementById('modalBody').innerHTML = `
         <div style="padding:1.1rem .9rem;color:var(--red);font-size:.86rem;line-height:1.5">
-          Für dieses Ergebnis wurden keine Quoten gefunden.
+          ${t('noOddsForResult')}
         </div>
-        <button class="btn-back" onclick="showOutcomePicker(${pendingEventIdx})">← Anderes Ergebnis</button>
-        <button class="btn-back" onclick="backToEventList()" style="margin-left:.5rem">← Anderes Spiel</button>`;
+        <button class="btn-back" onclick="showOutcomePicker(${pendingEventIdx})">${t('otherResult')}</button>
+        <button class="btn-back" onclick="backToEventList()" style="margin-left:.5rem">${t('otherGame')}</button>`;
       return;
     }
 
     closeModal();
     renderComparisonTable(rows, matchName, outcome.displayLabel);
-    showToast(`${rows.length} Quoten für „${outcome.displayLabel}" geladen`);
+    showToast(t('oddsLoaded', rows.length, outcome.displayLabel));
     document.getElementById('comparisonResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -2117,17 +2469,15 @@
         }
         const m = Math.floor(remaining / 60);
         const s = remaining % 60;
-        const timeStr = m > 0
-          ? `${m} Min${s > 0 ? ' ' + s + ' Sek' : ''}`
-          : `${s} Sek`;
+        const timeStr = t('waitTime', m, s);
         banner.innerHTML = `
           <span class="rl-icon">⏱</span>
           <div class="rl-body">
-            <div class="rl-title">Anfragelimit erreicht</div>
+            <div class="rl-title">${t('rlTitle')}</div>
             <div class="rl-countdown">${timeStr}</div>
-            <div class="rl-sub">Bitte warten, bis das Kontingent wieder freigegeben wird.</div>
+            <div class="rl-sub">${t('rlSub')}</div>
           </div>
-          <button class="rl-close" onclick="hideRateLimitBanner()" aria-label="Schließen">×</button>`;
+          <button class="rl-close" onclick="hideRateLimitBanner()" aria-label="${t('close')}">×</button>`;
         banner.classList.add('visible');
         remaining--;
       }
@@ -2139,10 +2489,10 @@
       banner.innerHTML = `
         <span class="rl-icon">⚠</span>
         <div class="rl-body">
-          <div class="rl-title">Anfragelimit erreicht</div>
-          <div class="rl-sub">Das Kontingent setzt sich stündlich zurück — bitte später erneut versuchen.</div>
+          <div class="rl-title">${t('rlTitle')}</div>
+          <div class="rl-sub">${t('rlSubGeneric')}</div>
         </div>
-        <button class="rl-close" onclick="hideRateLimitBanner()" aria-label="Schließen">×</button>`;
+        <button class="rl-close" onclick="hideRateLimitBanner()" aria-label="${t('close')}">×</button>`;
       banner.classList.add('visible');
     }
   }
